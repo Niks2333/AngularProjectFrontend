@@ -1,0 +1,36 @@
+<div class="container mt-4">
+  <h2>Store List</h2>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <table *ngIf="stores.length > 0" class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Image</th> 
+        <th>Created By</th>
+        <th>Created On</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let store of stores">
+        <td>{{ store.storeId }}</td>
+        <td>{{ store.storeName }}</td>
+        <td>
+          <img *ngIf="store.storeImage"
+               [src]="store.storeImage"
+               alt="Store Image"
+               width="100"
+               height="100" />
+        </td>
+        <td>{{ store.createdBy }}</td>
+        <td>{{ store.createdOn | date: 'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="stores.length === 0 && !error">No stores found.</p>
+</div>
