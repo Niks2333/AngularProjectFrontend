@@ -1,0 +1,52 @@
+<div class="filters mb-3">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Search Product"
+    [(ngModel)]="filters.search"
+    (input)="applyFilters()" />
+
+  <select class="form-select" [(ngModel)]="filters.category" (change)="applyFilters()">
+    <option value="">All Categories</option>
+    <option *ngFor="let category of stockData?.Categories" [value]="category">
+      {{ category }}
+    </option>
+  </select>
+
+  <select class="form-select" [(ngModel)]="filters.pageSize" (change)="applyFilters()">
+    <option *ngFor="let size of [5, 10, 15, 20]" [value]="size">{{ size }}</option>
+  </select>
+</div>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th (click)="sortBy('ProductName')">Product</th>
+      <th (click)="sortBy('CategoryName')">Category</th>
+      <th (click)="sortBy('StorePrice')">Price</th>
+      <th (click)="sortBy('Stock')">Stock</th>
+      <th>Image</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of stockData?.Products">
+      <td>{{ product.ProductName }}</td>
+      <td>{{ product.CategoryName }}</td>
+      <td>{{ product.StorePrice }}</td>
+      <td>{{ product.Stock }}</td>
+      <td><img *ngIf="product.ImagePath" [src]="'assets/images/' + product.ImagePath" width="50" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center">
+  <button class="btn btn-secondary" (click)="prevPage()" [disabled]="filters.page === 1">Previous</button>
+  <span>Page {{ filters.page }}</span>
+<button
+  class="btn btn-secondary"
+  (click)="nextPage()"
+  [disabled]="stockData && (filters.page * filters.pageSize >= stockData.TotalCount)">
+  Next
+</button>
+
+</div>

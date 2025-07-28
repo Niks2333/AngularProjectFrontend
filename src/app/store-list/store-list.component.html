@@ -28,6 +28,11 @@
         </td>
         <td>{{ store.createdBy }}</td>
         <td>{{ store.createdOn | date: 'short' }}</td>
+        <td>
+    <button class="btn btn-sm btn-primary" (click)="viewStock(store.storeName)">
+      <i class="bi bi-box-seam"></i> View Stock
+    </button>
+  </td>
       </tr>
     </tbody>
   </table>

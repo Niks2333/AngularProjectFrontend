@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '../models/store.model';
 import { StoreService } from '../services/store.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-store-list',
   templateUrl: './store-list.component.html',
@@ -11,7 +11,11 @@ export class StoreListComponent implements OnInit {
   stores: Store[] = [];
   error = '';
 
-  constructor(private storeService: StoreService) {}
+  constructor(
+  private storeService: StoreService,
+  private router: Router 
+) {}
+
 
   ngOnInit(): void {
     this.storeService.getStores().subscribe({
@@ -47,4 +51,10 @@ this.stores = rawStores.map((store: any) => {
     const binary = String.fromCharCode(...new Uint8Array(buffer));
     return 'data:image/png;base64,' + btoa(binary);
   }
+
+
+  
+viewStock(storeName: string) {
+  this.router.navigate(['/store', storeName, 'stock']);
+}
 }
