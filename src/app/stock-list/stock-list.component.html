@@ -1,52 +1,92 @@
-<div class="filters mb-3">
-  <input
-    type="text"
-    class="form-control"
-    placeholder="Search Product"
-    [(ngModel)]="filters.search"
-    (input)="applyFilters()" />
+<div class="card shadow-sm p-3 mb-4">
+  <div class="card-body">
+    <div class="row g-3 align-items-center">
 
-  <select class="form-select" [(ngModel)]="filters.category" (change)="applyFilters()">
-    <option value="">All Categories</option>
-    <option *ngFor="let category of stockData?.Categories" [value]="category">
-      {{ category }}
-    </option>
-  </select>
+      <div class="col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="🔍 Search Product"
+          [(ngModel)]="filters.search"
+          (input)="applyFilters()" />
+      </div>
 
-  <select class="form-select" [(ngModel)]="filters.pageSize" (change)="applyFilters()">
-    <option *ngFor="let size of [5, 10, 15, 20]" [value]="size">{{ size }}</option>
-  </select>
+
+      <div class="col-md-4">
+        <select
+          class="form-select"
+          [(ngModel)]="filters.category"
+          (change)="applyFilters()">
+          <option value="">📂 All Categories</option>
+          <option *ngFor="let category of stockData?.Categories" [value]="category">
+            {{ category }}
+          </option>
+        </select>
+      </div>
+
+
+      <div class="col-md-4">
+        <select
+          class="form-select"
+          [(ngModel)]="filters.pageSize"
+          (change)="applyFilters()">
+          <option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
+            Show {{ size }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
 </div>
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th (click)="sortBy('ProductName')">Product</th>
-      <th (click)="sortBy('CategoryName')">Category</th>
-      <th (click)="sortBy('StorePrice')">Price</th>
-      <th (click)="sortBy('Stock')">Stock</th>
-      <th>Image</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let product of stockData?.Products">
-      <td>{{ product.ProductName }}</td>
-      <td>{{ product.CategoryName }}</td>
-      <td>{{ product.StorePrice }}</td>
-      <td>{{ product.Stock }}</td>
-      <td><img *ngIf="product.ImagePath" [src]="'assets/images/' + product.ImagePath" width="50" /></td>
-    </tr>
-  </tbody>
-</table>
 
-<div class="d-flex justify-content-between align-items-center">
-  <button class="btn btn-secondary" (click)="prevPage()" [disabled]="filters.page === 1">Previous</button>
-  <span>Page {{ filters.page }}</span>
-<button
-  class="btn btn-secondary"
-  (click)="nextPage()"
-  [disabled]="stockData && (filters.page * filters.pageSize >= stockData.TotalCount)">
-  Next
-</button>
+<div class="table-responsive shadow-sm rounded mb-4">
+  <table class="table table-bordered table-striped table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th (click)="sortBy('ProductName')" style="cursor: pointer;">Product</th>
+        <th (click)="sortBy('CategoryName')" style="cursor: pointer;">Category</th>
+        <th (click)="sortBy('StorePrice')" style="cursor: pointer;">Price</th>
+        <th (click)="sortBy('Stock')" style="cursor: pointer;">Stock</th>
+        <th>Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of stockData?.Products">
+        <td>{{ product.ProductName }}</td>
+        <td>{{ product.CategoryName }}</td>
+        <td>₹{{ product.StorePrice }}</td>
+        <td>{{ product.Stock }}</td>
+        <td>
+          <img
+            *ngIf="product.ImagePath"
+            [src]="'assets/images/' + product.ImagePath"
+            class="img-thumbnail"
+            style="width: 50px; height: auto;" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
+<div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
+  <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="filters.page === 1">
+    ⬅️ Previous
+  </button>
+
+  <ng-container *ngFor="let page of pageNumbers">
+    <button
+      class="btn"
+      [ngClass]="{ 'btn-primary': filters.page === page, 'btn-outline-secondary': filters.page !== page }"
+      (click)="goToPage(page)">
+      {{ page }}
+    </button>
+  </ng-container>
+
+  <button
+    class="btn btn-outline-primary"
+    (click)="nextPage()"
+    [disabled]="stockData && (filters.page * filters.pageSize >= stockData.TotalCount)">
+    Next ➡️
+  </button>
 </div>

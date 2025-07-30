@@ -14,17 +14,22 @@ export class StoreStockService {
   getStock(storeName: string): Observable<StoreProductViewModel> {
     return this.http.get<StoreProductViewModel>(`${this.baseUrl}/bystore?storeName=${storeName}`);
   }
-  getStockWithParams(storeName: string, filters: any): Observable<StoreProductViewModel> {
-  let params = new HttpParams()
-    .set('storeName', storeName)
-    .set('search', filters.search || '')
-    .set('category', filters.category || '')
-    .set('page', filters.page)
-    .set('pageSize', filters.pageSize)
-    .set('sortColumn', filters.sortColumn || '')
-    .set('sortOrder', filters.sortOrder || '');
+getStockWithParams(storeName: string, filters: any): Observable<StoreProductViewModel> {
+  const model: StoreProductViewModel = {
+    StoreName: storeName,
+    Search: filters.search,
+    SelectedCategory: filters.category,
+    Page: filters.page,
+    PageSize: filters.pageSize,
+    SortColumn: filters.sortColumn,
+    SortOrder: filters.sortOrder,
+    Products: [],          // just placeholder, not needed in request
+    Categories: [],        // same here
+    TotalCount: 0          // ignored by backend
+  };
 
-  return this.http.get<StoreProductViewModel>('http://localhost:56262/api/stock/bystore', { params });
+  return this.http.post<StoreProductViewModel>('http://localhost:56262/api/stock/bystore', model);
 }
+
 
 }

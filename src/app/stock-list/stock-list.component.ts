@@ -26,6 +26,27 @@ export class StockListComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+  get pageNumbers(): number[] {
+  const totalPages = Math.ceil((this.stockData?.TotalCount || 0) / this.filters.pageSize);
+  const currentPage = this.filters.page;
+  const pages: number[] = [];
+
+  const start = Math.max(currentPage - 2, 1);
+  const end = Math.min(currentPage + 3, totalPages);
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+}
+  goToPage(page: number) {
+  if (page !== this.filters.page) {
+    this.filters.page = page;
+    this.fetchStock();
+  }
+}
+
   ngOnInit(): void {
     this.storeName = this.route.snapshot.paramMap.get('storeName') || '';
     this.fetchStock();
