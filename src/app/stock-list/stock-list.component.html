@@ -12,17 +12,18 @@
       </div>
 
 
-      <div class="col-md-4">
-        <select
-          class="form-select"
-          [(ngModel)]="filters.category"
-          (change)="applyFilters()">
-          <option value="">📂 All Categories</option>
-          <option *ngFor="let category of stockData?.Categories" [value]="category">
-            {{ category }}
-          </option>
-        </select>
-      </div>
+  <div class="col-md-4">
+  <ng-multiselect-dropdown
+    [placeholder]="'📂 Select Categories'"
+    [data]="categoryDropdownList"
+    [(ngModel)]="filters.SelectedCategories"
+    [settings]="dropdownSettings"
+    (onSelect)="applyFilters()"
+    (onDeSelect)="applyFilters()"
+    (onSelectAll)="applyFilters()"
+    (onDeSelectAll)="applyFilters()">
+  </ng-multiselect-dropdown>
+</div>
 
 
       <div class="col-md-4">

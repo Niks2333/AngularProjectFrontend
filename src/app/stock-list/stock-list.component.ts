@@ -12,15 +12,15 @@ export class StockListComponent implements OnInit {
   storeName = '';
   stockData?: StoreProductViewModel;
 
-  filters = {
-    search: '',
-    category: '',
-    page: 1,
-    pageSize: 5,
-    sortColumn: 'ProductName',
-    sortOrder: 'ASC' as 'ASC' | 'DESC'
-  };
-
+categoryDropdownList: any[] = [];
+filters = {
+  search: '',
+  SelectedCategories: [] as string[],
+  page: 1,
+  pageSize: 5,
+  sortColumn: 'ProductName',
+  sortOrder: 'ASC' as 'ASC' | 'DESC'
+};
   constructor(
     private stockService: StoreStockService,
     private route: ActivatedRoute
@@ -40,6 +40,15 @@ export class StockListComponent implements OnInit {
 
   return pages;
 }
+dropdownSettings = {
+  singleSelection: false,
+  idField: 'value',
+  textField: 'value',
+  selectAllText: 'Select All',
+  unSelectAllText: 'Unselect All',
+  itemsShowLimit: 3,
+  allowSearchFilter: true
+};
   goToPage(page: number) {
   if (page !== this.filters.page) {
     this.filters.page = page;
@@ -51,13 +60,15 @@ export class StockListComponent implements OnInit {
     this.storeName = this.route.snapshot.paramMap.get('storeName') || '';
     this.fetchStock();
   }
-
-  fetchStock() {
-    this.stockService.getStockWithParams(this.storeName, this.filters).subscribe({
-      next: (data) => (this.stockData = data),
-      error: (err) => console.error('Error fetching stock', err)
-    });
-  }
+fetchStock() {
+  this.stockService.getStockWithParams(this.storeName, this.filters).subscribe({
+    next: (data) => {
+      this.stockData = data;
+      this.categoryDropdownList = data.Categories.map(c => ({ value: c }));
+    },
+    error: (err) => console.error('Error fetching stock', err)
+  });
+}
 
   applyFilters() {
     this.filters.page = 1;

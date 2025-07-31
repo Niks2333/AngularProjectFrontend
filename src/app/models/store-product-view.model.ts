@@ -2,7 +2,7 @@ export interface StoreProductViewModel {
   StoreName: string;
   Products: Product[];
   Categories: string[];
-  SelectedCategory: string | null;
+  SelectedCategories: string[];
   Search: string | null;
   Page: number;
   PageSize: number;
