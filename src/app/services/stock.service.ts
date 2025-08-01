@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StoreProductViewModel } from '../models/store-product-view.model';
 import { environment } from 'src/environments/environment';
+import { WebAddStockViewModel } from '../models/web-add-stock.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +26,20 @@ getStockWithParams(storeName: string, filters: any): Observable<StoreProductView
     PageSize: filters.pageSize,
     SortColumn: filters.sortColumn,
     SortOrder: filters.sortOrder,
-    Products: [],
+   Products: [],
     Categories: [],
-    TotalCount: 0
+  TotalCount: 0
   };
 
   return this.http.post<StoreProductViewModel>(`${this.baseUrl}/bystore`, model);
 }
+
+getAddStockFormData(storeName: string): Observable<WebAddStockViewModel> {
+  return this.http.get<WebAddStockViewModel>(`${this.baseUrl}/add-form-data?storeName=${storeName}`);
+}
+addStock(formData: FormData): Observable<any> {
+  return this.http.post(`${this.baseUrl}/add`, formData);
+}
+
 
 }

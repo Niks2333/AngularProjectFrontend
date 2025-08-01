@@ -7,18 +7,24 @@ import { HttpClientModule } from '@angular/common/http';
 import { StockListComponent } from './stock-list/stock-list.component';
 import { FormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { AddStockModalComponent } from './components/add-stock-modal/add-stock-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,
     StoreListComponent,
-    StockListComponent
+    StockListComponent,
+    AddStockModalComponent,
+    
   ],
   imports: [
     BrowserModule,
     HttpClientModule ,
     AppRoutingModule,
     FormsModule,
-     NgMultiSelectDropDownModule.forRoot()
+     NgMultiSelectDropDownModule.forRoot(),
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

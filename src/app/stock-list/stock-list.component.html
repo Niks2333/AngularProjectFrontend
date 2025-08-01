@@ -1,8 +1,12 @@
-<div class="card shadow-sm p-3 mb-4">
+
+<div class="card shadow-sm p-3 mb-4 border border-primary">
   <div class="card-body">
+    <h5 class="mb-3 text-primary fw-bold">🔧 Filters</h5>
     <div class="row g-3 align-items-center">
 
+      
       <div class="col-md-4">
+        <label class="form-label fw-semibold">Search Product</label>
         <input
           type="text"
           class="form-control"
@@ -11,22 +15,24 @@
           (input)="applyFilters()" />
       </div>
 
-
-  <div class="col-md-4">
-  <ng-multiselect-dropdown
-    [placeholder]="'📂 Select Categories'"
-    [data]="categoryDropdownList"
-    [(ngModel)]="filters.SelectedCategories"
-    [settings]="dropdownSettings"
-    (onSelect)="applyFilters()"
-    (onDeSelect)="applyFilters()"
-    (onSelectAll)="applyFilters()"
-    (onDeSelectAll)="applyFilters()">
-  </ng-multiselect-dropdown>
-</div>
-
-
+      
       <div class="col-md-4">
+        <label class="form-label fw-semibold">Category</label>
+        <ng-multiselect-dropdown
+          [placeholder]="'📂 Select Categories'"
+          [data]="categoryDropdownList"
+          [(ngModel)]="filters.SelectedCategories"
+          [settings]="dropdownSettings"
+          (onSelect)="applyFilters()"
+          (onDeSelect)="applyFilters()"
+          (onSelectAll)="applyFilters()"
+          (onDeSelectAll)="applyFilters()">
+        </ng-multiselect-dropdown>
+      </div>
+
+     
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">Items per page</label>
         <select
           class="form-select"
           [(ngModel)]="filters.pageSize"
@@ -36,19 +42,45 @@
           </option>
         </select>
       </div>
+
     </div>
   </div>
 </div>
 
 
-<div class="table-responsive shadow-sm rounded mb-4">
+<div class="d-flex justify-content-end mb-3">
+  <button class="btn btn-success" (click)="openAddModal()">
+    <i class="bi bi-plus-circle me-1"></i> Add Stock
+  </button>
+</div>
+
+
+<app-add-stock-modal
+  *ngIf="showAddModal"
+  [storeName]="storeName"
+  [isVisible]="showAddModal"
+  (closed)="onAddModalClosed($event)">
+</app-add-stock-modal>
+
+<hr class="my-4 border border-secondary" />
+
+
+<div class="table-responsive shadow-sm rounded mb-4 border border-secondary p-2">
   <table class="table table-bordered table-striped table-hover align-middle">
     <thead class="table-light">
       <tr>
-        <th (click)="sortBy('ProductName')" style="cursor: pointer;">Product</th>
-        <th (click)="sortBy('CategoryName')" style="cursor: pointer;">Category</th>
-        <th (click)="sortBy('StorePrice')" style="cursor: pointer;">Price</th>
-        <th (click)="sortBy('Stock')" style="cursor: pointer;">Stock</th>
+        <th (click)="sortBy('ProductName')" style="cursor: pointer;">
+          Product {{ getSortArrow('ProductName') }}
+        </th>
+        <th (click)="sortBy('CategoryName')" style="cursor: pointer;">
+          Category {{ getSortArrow('CategoryName') }}
+        </th>
+        <th (click)="sortBy('StorePrice')" style="cursor: pointer;">
+          Price {{ getSortArrow('StorePrice') }}
+        </th>
+        <th (click)="sortBy('Stock')" style="cursor: pointer;">
+          Stock {{ getSortArrow('Stock') }}
+        </th>
         <th>Image</th>
       </tr>
     </thead>
@@ -60,8 +92,7 @@
         <td>{{ product.Stock }}</td>
         <td>
           <img
-            *ngIf="product.ImagePath"
-            [src]="'assets/images/' + product.ImagePath"
+            [src]="product.ImagePath ? 'assets/images/' + product.ImagePath : 'assets/images/image-not-found.png'"
             class="img-thumbnail"
             style="width: 50px; height: auto;" />
         </td>
@@ -69,6 +100,7 @@
     </tbody>
   </table>
 </div>
+
 
 <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
   <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="filters.page === 1">

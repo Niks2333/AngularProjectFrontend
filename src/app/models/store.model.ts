@@ -3,5 +3,5 @@ export interface Store {
   storeName: string;
   createdBy: string;
   createdOn: string;
-  storeImage?: string; // optional base64 image
+  storeImage?: string; 
 }

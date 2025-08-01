@@ -8,31 +8,22 @@
   <table *ngIf="stores.length > 0" class="table table-bordered table-striped">
     <thead class="table-dark">
       <tr>
-        <th>ID</th>
         <th>Name</th>
-        <th>Image</th> 
         <th>Created By</th>
         <th>Created On</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let store of stores">
-        <td>{{ store.storeId }}</td>
-        <td>{{ store.storeName }}</td>
+        <td>{{ store.StoreName }}</td>
+        <td>{{ store.CreatedBy }}</td>
+        <td>{{ store.CreatedOn | date: 'short' }}</td>
         <td>
-          <img *ngIf="store.storeImage"
-               [src]="store.storeImage"
-               alt="Store Image"
-               width="100"
-               height="100" />
+          <button class="btn btn-sm btn-primary" (click)="viewStock(store.StoreName)">
+            <i class="bi bi-box-seam"></i> View Stock
+          </button>
         </td>
-        <td>{{ store.createdBy }}</td>
-        <td>{{ store.createdOn | date: 'short' }}</td>
-        <td>
-    <button class="btn btn-sm btn-primary" (click)="viewStock(store.storeName)">
-      <i class="bi bi-box-seam"></i> View Stock
-    </button>
-  </td>
       </tr>
     </tbody>
   </table>
