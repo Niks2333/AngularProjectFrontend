@@ -1,6 +1,12 @@
-  <div class="modal fade show d-block" tabindex="-1" role="dialog" *ngIf="isVisible">
+
+<div *ngIf="isVisible" class="custom-modal-wrapper">
+
+  <div class="custom-backdrop" (click)="close()"></div>
+
+
+  <div class="modal fade show d-block custom-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
+      <div class="modal-content" (click)="$event.stopPropagation()">
         <form (ngSubmit)="submit()" [formGroup]="form">
           <div class="modal-header bg-primary text-white">
             <h5 class="modal-title">Add Stock to {{ storeName }}</h5>
@@ -10,12 +16,11 @@
           <div class="modal-body">
             <div class="mb-3">
               <label class="form-label">Select Product</label>
-      <select class="form-select" formControlName="ProductName" required>
-    <option *ngFor="let product of availableProducts" [value]="product">
-      {{ product }}
-    </option>
-  </select>
-
+              <select class="form-select" formControlName="ProductName" required>
+                <option *ngFor="let product of availableProducts" [value]="product">
+                  {{ product }}
+                </option>
+              </select>
             </div>
 
             <div class="mb-3">
@@ -42,3 +47,4 @@
       </div>
     </div>
   </div>
+</div>

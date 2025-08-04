@@ -13,24 +13,23 @@ export class StoreStockService {
 
   constructor(private http: HttpClient) {}
 
-  getStock(storeName: string): Observable<StoreProductViewModel> {
+   getStock(storeName: string): Observable<StoreProductViewModel> {
     return this.http.get<StoreProductViewModel>(`${this.baseUrl}/bystore?storeName=${storeName}`);
-  }
+   }
 
-getStockWithParams(storeName: string, filters: any): Observable<StoreProductViewModel> {
+getStockWithParams(filters: any): Observable<StoreProductViewModel> {
   const model: StoreProductViewModel = {
-    StoreName: storeName,
+    StoreName: filters.storeName,
     Search: filters.search,
-    SelectedCategories: filters.SelectedCategories.map((cat: any) => typeof cat === 'string' ? cat : cat.value), 
+    SelectedCategories: filters.SelectedCategories.map((cat: any) => typeof cat === 'string' ? cat : cat.value),
     Page: filters.page,
     PageSize: filters.pageSize,
     SortColumn: filters.sortColumn,
     SortOrder: filters.sortOrder,
-   Products: [],
+    Products: [],
     Categories: [],
-  TotalCount: 0
+    TotalCount: 0
   };
-
   return this.http.post<StoreProductViewModel>(`${this.baseUrl}/bystore`, model);
 }
 

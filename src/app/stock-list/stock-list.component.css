@@ -1,0 +1,21 @@
+table th {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+table td {
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.card {
+  border-radius: 1rem !important;
+}
+
+img.rounded {
+  border: 1px solid #eee;
+}
+
+.btn-sm {
+  font-size: 0.8rem;
+}

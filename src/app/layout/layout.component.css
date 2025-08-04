@@ -1,0 +1,44 @@
+
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.d-flex {
+  height: 100%;
+}
+
+
+.sidebar {
+  height: 100vh;
+  width: 0;
+  background-color: #343a40;
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+  white-space: nowrap;
+  padding-top: 1rem;
+}
+
+.sidebar.open {
+  width: 200px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.sidebar .nav-link {
+  color: white;
+  padding: 8px 0;
+}
+
+.sidebar .nav-link:hover {
+  background-color: #495057;
+  border-radius: 4px;
+}
+
+
+.flex-grow-1 {
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}

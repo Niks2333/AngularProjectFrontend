@@ -1,125 +1,116 @@
+<div class="container my-4">
 
-<div class="card shadow-sm p-3 mb-4 border border-primary">
-  <div class="card-body">
-    <h5 class="mb-3 text-primary fw-bold">🔧 Filters</h5>
-    <div class="row g-3 align-items-center">
+  <!-- Optional store name heading -->
+  <!--
+  <h4 class="text-primary fw-bold mb-3 ms-1">
+    🏬 Showing Stock for: {{ storeName }}
+  </h4>
+  -->
 
-      
-      <div class="col-md-4">
-        <label class="form-label fw-semibold">Search Product</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="🔍 Search Product"
-          [(ngModel)]="filters.search"
-          (input)="applyFilters()" />
-      </div>
+  <div class="card shadow-sm p-3 mb-4 border border-primary">
+    <div class="card-body">
+      <h5 class="mb-3 text-primary fw-bold">🔧 Filters</h5>
+      <div class="row g-3 align-items-center">
 
-      
-      <div class="col-md-4">
-        <label class="form-label fw-semibold">Category</label>
-        <ng-multiselect-dropdown
-          [placeholder]="'📂 Select Categories'"
-          [data]="categoryDropdownList"
-          [(ngModel)]="filters.SelectedCategories"
-          [settings]="dropdownSettings"
-          (onSelect)="applyFilters()"
-          (onDeSelect)="applyFilters()"
-          (onSelectAll)="applyFilters()"
-          (onDeSelectAll)="applyFilters()">
-        </ng-multiselect-dropdown>
-      </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Search Product</label>
+          <input type="text" class="form-control" placeholder="🔍 Search Product" [(ngModel)]="filters.search"
+            (input)="applyFilters()" />
+        </div>
 
      
-      <div class="col-md-4">
-        <label class="form-label fw-semibold">Items per page</label>
-        <select
-          class="form-select"
-          [(ngModel)]="filters.pageSize"
-          (change)="applyFilters()">
-          <option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
-            Show {{ size }}
-          </option>
-        </select>
-      </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Category</label>
+          <ng-multiselect-dropdown [placeholder]="'📂 Select Categories'" [data]="categoryDropdownList"
+            [(ngModel)]="filters.SelectedCategories" [settings]="dropdownSettings" (onSelect)="applyFilters()"
+            (onDeSelect)="applyFilters()" (onSelectAll)="applyFilters()" (onDeSelectAll)="applyFilters()">
+          </ng-multiselect-dropdown>
+        </div>
 
+
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Items per page</label>
+          <select class="form-select" [(ngModel)]="filters.pageSize" (change)="applyFilters()">
+            <option *ngFor="let size of [5, 10, 15, 20]" [value]="size">Show {{ size }}</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
 
-<div class="d-flex justify-content-end mb-3">
-  <button class="btn btn-success" (click)="openAddModal()">
-    <i class="bi bi-plus-circle me-1"></i> Add Stock
-  </button>
-</div>
-
-
-<app-add-stock-modal
-  *ngIf="showAddModal"
-  [storeName]="storeName"
-  [isVisible]="showAddModal"
-  (closed)="onAddModalClosed($event)">
-</app-add-stock-modal>
-
-<hr class="my-4 border border-secondary" />
-
-
-<div class="table-responsive shadow-sm rounded mb-4 border border-secondary p-2">
-  <table class="table table-bordered table-striped table-hover align-middle">
-    <thead class="table-light">
-      <tr>
-        <th (click)="sortBy('ProductName')" style="cursor: pointer;">
-          Product {{ getSortArrow('ProductName') }}
-        </th>
-        <th (click)="sortBy('CategoryName')" style="cursor: pointer;">
-          Category {{ getSortArrow('CategoryName') }}
-        </th>
-        <th (click)="sortBy('StorePrice')" style="cursor: pointer;">
-          Price {{ getSortArrow('StorePrice') }}
-        </th>
-        <th (click)="sortBy('Stock')" style="cursor: pointer;">
-          Stock {{ getSortArrow('Stock') }}
-        </th>
-        <th>Image</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of stockData?.Products">
-        <td>{{ product.ProductName }}</td>
-        <td>{{ product.CategoryName }}</td>
-        <td>₹{{ product.StorePrice }}</td>
-        <td>{{ product.Stock }}</td>
-        <td>
-          <img
-            [src]="product.ImagePath ? 'assets/images/' + product.ImagePath : 'assets/images/image-not-found.png'"
-            class="img-thumbnail"
-            style="width: 50px; height: auto;" />
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
-<div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
-  <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="filters.page === 1">
-    ⬅️ Previous
-  </button>
-
-  <ng-container *ngFor="let page of pageNumbers">
-    <button
-      class="btn"
-      [ngClass]="{ 'btn-primary': filters.page === page, 'btn-outline-secondary': filters.page !== page }"
-      (click)="goToPage(page)">
-      {{ page }}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-success" (click)="navigateBack()">← Back to Stores</button>
+    <button class="btn btn-success" (click)="openAddModal()">
+      <i class="bi bi-plus-circle me-1"></i> Add Stock
     </button>
-  </ng-container>
+  </div>
 
-  <button
-    class="btn btn-outline-primary"
-    (click)="nextPage()"
-    [disabled]="stockData && (filters.page * filters.pageSize >= stockData.TotalCount)">
-    Next ➡️
-  </button>
+
+  <app-add-stock-modal *ngIf="showAddModal" [storeName]="storeName" [isVisible]="showAddModal"
+    (closed)="onAddModalClosed($event)">
+  </app-add-stock-modal>
+
+  <hr class="my-4 border border-secondary" />
+
+
+  <div class="table-responsive shadow-sm rounded mb-4 border border-secondary p-2">
+    <table class="table table-bordered table-striped table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th (click)="sortBy('ProductName')" style="cursor: pointer;">
+            Product {{ getSortArrow('ProductName') }}
+          </th>
+          <th (click)="sortBy('CategoryName')" style="cursor: pointer;">
+            Category {{ getSortArrow('CategoryName') }}
+          </th>
+          <th (click)="sortBy('StorePrice')" style="cursor: pointer;">
+            Price {{ getSortArrow('StorePrice') }}
+          </th>
+          <th (click)="sortBy('Stock')" style="cursor: pointer;">
+            Stock {{ getSortArrow('Stock') }}
+          </th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of stockData?.Products">
+          <td>{{ product.ProductName }}</td>
+          <td>{{ product.CategoryName }}</td>
+          <td>₹{{ product.StorePrice }}</td>
+          <td>{{ product.Stock }}</td>
+          <td>
+            <img [src]="product.ImagePath ? backendImageUrl + product.ImagePath : fallbackImage" class="img-thumbnail"
+              style="width: 50px; height: auto;" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+    <!-- 
+  <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
+    <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="filters.page === 1">
+      ⬅️ Previous
+    </button>
+
+    <ng-container *ngFor="let page of pageNumbers">
+      <button class="btn"
+        [ngClass]="{ 'btn-primary': filters.page === page, 'btn-outline-secondary': filters.page !== page }"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+    </ng-container>
+
+    <button class="btn btn-outline-primary" (click)="nextPage()"
+      [disabled]="stockData && (filters.page * filters.pageSize >= stockData.TotalCount)">
+      Next ➡️
+    </button>
+  </div>       -->
+  <nav class="d-flex justify-content-center mt-3">
+    <ngb-pagination [collectionSize]="stockData?.TotalCount || 0" [(page)]="filters.page" [pageSize]="filters.pageSize"
+      [maxSize]="5" [boundaryLinks]="true" [rotate]="true" (pageChange)="fetchStock()">
+    </ngb-pagination>
+  </nav>
+
 </div>

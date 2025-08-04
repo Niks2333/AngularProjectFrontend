@@ -57,10 +57,10 @@ submit() {
   this.stockService.addStock(formData).subscribe({
     next: (res: any) => {
       if (res.success) {
-        alert('Success: ' + res.message);  // ✅ show success message
+        alert('Success: ' + res.message);  
         this.close();
       } else {
-        alert('Error: ' + res.message);    // ✅ show error if result is false
+        alert('Error: ' + res.message);
       }
     },
     error: err => {
@@ -72,4 +72,5 @@ submit() {
   close(refresh: boolean = false) {
     this.closed.emit(refresh);
   }
+  
 }

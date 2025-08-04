@@ -1,0 +1,29 @@
+
+<div class="d-flex" style="height: 100vh;">
+
+  <div [ngClass]="{ 'sidebar': true, 'open': sidebarOpen }">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a routerLink="/" class="nav-link text-white">🏬 Stores</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/" class="nav-link text-white">📦 Stock</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="flex-grow-1">
+    <nav class="navbar navbar-dark bg-dark px-3">
+      <button class="btn btn-outline-light" (click)="toggleSidebar()">☰</button>
+      <span class="navbar-brand mb-0 ms-3">Inventory Management</span>
+    </nav>
+
+    <main class="container-fluid mt-3">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="bg-light text-center text-muted py-2 mt-4 border-top">
+      <small>&copy; 2025 Nikhil Chaudhari</small>
+    </footer>
+  </div>
+</div>

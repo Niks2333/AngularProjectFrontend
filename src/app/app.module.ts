@@ -9,13 +9,16 @@ import { FormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AddStockModalComponent } from './components/add-stock-modal/add-stock-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { LayoutComponent } from './layout/layout.component';
 @NgModule({
   declarations: [
     AppComponent,
     StoreListComponent,
     StockListComponent,
     AddStockModalComponent,
+    LayoutComponent,
     
   ],
   imports: [
@@ -24,7 +27,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     FormsModule,
      NgMultiSelectDropDownModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule,
+     NgbPaginationModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
