@@ -18,11 +18,12 @@ export class AddStockModalComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private stockService: StoreStockService) {}
 ngOnInit() {
-  this.form = this.fb.group({
-    ProductName: ['', Validators.required],
-    StorePrice: ['', Validators.required],
-    Stock: ['', Validators.required],
-  });
+this.form = this.fb.group({
+  ProductName: ['', Validators.required],
+  StorePrice: ['', [Validators.required, Validators.min(1)]],
+  Stock: ['', [Validators.required, Validators.min(0)]],
+});
+
 
   console.log('Fetching available products for store:', this.storeName);
 
@@ -45,6 +46,11 @@ ngOnInit() {
   }
 
 submit() {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched(); 
+    return;
+  }
+
   const formData = new FormData();
   formData.append('StoreName', this.storeName);
   formData.append('ProductName', this.form.value.ProductName);
@@ -57,17 +63,18 @@ submit() {
   this.stockService.addStock(formData).subscribe({
     next: (res: any) => {
       if (res.success) {
-        alert('Success: ' + res.message);  
-        this.close();
+        this.close(true); 
       } else {
-        alert('Error: ' + res.message);
+        
+        this.form.setErrors({ apiError: res.message }); 
       }
     },
     error: err => {
-      alert('Failed to add stock due to an unexpected error.');
+      this.form.setErrors({ apiError: 'Failed to add stock.' });
     }
   });
 }
+
 
   close(refresh: boolean = false) {
     this.closed.emit(refresh);

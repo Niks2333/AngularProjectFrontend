@@ -12,6 +12,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { LayoutComponent } from './layout/layout.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { EditStockModalComponent } from './components/edit-stock-modal/edit-stock-modal.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +23,7 @@ import { LayoutComponent } from './layout/layout.component';
     StockListComponent,
     AddStockModalComponent,
     LayoutComponent,
+    EditStockModalComponent,
     
   ],
   imports: [
@@ -30,6 +35,8 @@ import { LayoutComponent } from './layout/layout.component';
     ReactiveFormsModule,
     NgbModule,
      NgbPaginationModule,
+      BrowserAnimationsModule,
+    NgxSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

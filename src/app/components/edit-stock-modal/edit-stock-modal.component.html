@@ -1,0 +1,42 @@
+<div class="modal-backdrop fade show" *ngIf="isVisible"></div>
+
+<div class="modal fade show d-block" tabindex="-1" *ngIf="isVisible">
+  <div class="modal-dialog">
+    <div class="modal-content border border-primary shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">✏️ Edit Stock</h5>
+        <button type="button" class="btn-close" (click)="close()"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm" (ngSubmit)="submit()">
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Product</label>
+            <input type="text" class="form-control" formControlName="ProductName" readonly />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Price</label>
+            <input type="number" class="form-control" formControlName="StorePrice" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Stock</label>
+            <input type="number" class="form-control" formControlName="Stock" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Image</label>
+            <input type="file" class="form-control" (change)="onImageChange($event)" />
+            <img *ngIf="imagePreview" [src]="imagePreview" class="img-thumbnail mt-2" width="80" />
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" [disabled]="editForm.invalid">💾 Save</button>
+            <button type="button" class="btn btn-secondary" (click)="close()">❌ Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

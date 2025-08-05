@@ -1,8 +1,5 @@
-
 <div *ngIf="isVisible" class="custom-modal-wrapper">
-
   <div class="custom-backdrop" (click)="close()"></div>
-
 
   <div class="modal fade show d-block custom-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -14,8 +11,12 @@
           </div>
 
           <div class="modal-body">
+
+
             <div class="mb-3">
-              <label class="form-label">Select Product</label>
+              <label class="form-label">
+                Select Product <span class="text-danger">*</span>
+              </label>
               <select class="form-select" formControlName="ProductName" required>
                 <option *ngFor="let product of availableProducts" [value]="product">
                   {{ product }}
@@ -23,20 +24,36 @@
               </select>
             </div>
 
+ 
             <div class="mb-3">
-              <label class="form-label">Store Price</label>
+              <label class="form-label">
+                Store Price <span class="text-danger">*</span>
+              </label>
               <input type="number" formControlName="StorePrice" class="form-control" required />
+              <div class="text-danger" *ngIf="form.get('StorePrice')?.touched && form.get('StorePrice')?.invalid">
+                <small *ngIf="form.get('StorePrice')?.errors?.['required']">Store Price is required.</small>
+                <small *ngIf="form.get('StorePrice')?.errors?.['min']">Price must be at least 1.</small>
+              </div>
             </div>
 
+   
             <div class="mb-3">
-              <label class="form-label">Stock Quantity</label>
+              <label class="form-label">
+                Stock Quantity <span class="text-danger">*</span>
+              </label>
               <input type="number" formControlName="Stock" class="form-control" required />
+              <div class="text-danger" *ngIf="form.get('Stock')?.touched && form.get('Stock')?.invalid">
+                <small *ngIf="form.get('Stock')?.errors?.['required']">Stock quantity is required.</small>
+                <small *ngIf="form.get('Stock')?.errors?.['min']">Stock must be 0 or more.</small>
+              </div>
             </div>
+
 
             <div class="mb-3">
               <label class="form-label">Upload Image</label>
               <input type="file" (change)="onFileChange($event)" class="form-control" />
             </div>
+
           </div>
 
           <div class="modal-footer">
@@ -44,6 +61,7 @@
             <button type="submit" class="btn btn-primary">Add Stock</button>
           </div>
         </form>
+
       </div>
     </div>
   </div>

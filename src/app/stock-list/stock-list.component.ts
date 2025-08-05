@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { StoreStockService } from '../services/stock.service';
 import { StoreProductViewModel } from '../models/store-product-view.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-stock-list',
@@ -14,8 +15,11 @@ export class StockListComponent implements OnInit {
   stockData?: StoreProductViewModel;
   backendImageUrl = 'http://localhost:56262/Content/images/';
   fallbackImage = 'assets/images/image-not-found.png';
+  
+  successMessage: string = '';
 
   categoryDropdownList: any[] = [];
+
   filters = {
     storeName: '',
     search: '',
@@ -29,6 +33,7 @@ export class StockListComponent implements OnInit {
     private stockService: StoreStockService,
     private route: ActivatedRoute,
     private router: Router,
+     private spinner: NgxSpinnerService
   ) { }
 
   get pageNumbers(): number[] {
@@ -69,6 +74,9 @@ export class StockListComponent implements OnInit {
   }
 
   fetchStock() {
+      this.spinner.show(undefined, {
+    type: 'ball-spin-clockwise' 
+  });
 
     this.stockService.getStockWithParams(this.filters)
       .subscribe({
@@ -76,9 +84,14 @@ export class StockListComponent implements OnInit {
            debugger;
           this.stockData = data;
           this.categoryDropdownList = data.Categories.map(c => ({ value: c }));
+           console.log("📦 Products Received:", this.stockData.Products);
+        this.spinner.hide();
         },
         
-        error: (err) => console.error('Error fetching stock', err)
+       error: (err) => {
+        console.error('Error fetching stock', err);
+        this.spinner.hide(); 
+      }
       });
   }
 
@@ -124,15 +137,65 @@ export class StockListComponent implements OnInit {
     }
   }
 
-  onAddModalClosed(refresh: boolean) {
-    this.showAddModal = false;
-    if (refresh) {
-      this.applyFilters();
-    }
+ onAddModalClosed(refresh: boolean) {
+  this.showAddModal = false;
+
+  if (refresh) {
+    this.successMessage = '✅ Stock added successfully!';
+    this.applyFilters(); 
+   
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 3000);
   }
+}
+
   navigateBack() {
     this.router.navigate(['']);
   }
+
+showEditModal = false;
+selectedStockId = 0;
+
+openEditModal(id: number) {
+  this.selectedStockId = id;
+  this.showEditModal = true;
+}
+
+onEditModalClosed(refresh: boolean) {
+  this.showEditModal = false;
+  if (refresh) {
+    this.successMessage = "✅ Stock updated successfully!";
+    this.applyFilters();
+
+    setTimeout(() => this.successMessage = '', 3000);
+  }
+}
+deleteStock(id: number) {
+  if (confirm('❗ Are you sure you want to delete this stock item?')) {
+    this.spinner.show();
+
+    this.stockService.deleteStock(id).subscribe({
+      
+      next: (res) => {
+        
+        if (res.success) {
+          this.successMessage = "🗑️ Stock deleted successfully!";
+          this.applyFilters(); 
+        } else {
+          alert("❌ Failed to delete: " + res.message);
+        }
+        this.spinner.hide();
+        setTimeout(() => this.successMessage = '', 3000);
+      },
+      error: (err) => {
+        console.error('Delete error', err);
+        alert("❌ Unexpected error during deletion.");
+        this.spinner.hide();
+      }
+    });
+  }
+}
 
 
 }

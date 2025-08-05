@@ -18,7 +18,7 @@
             (input)="applyFilters()" />
         </div>
 
-     
+
         <div class="col-md-4">
           <label class="form-label fw-semibold">Category</label>
           <ng-multiselect-dropdown [placeholder]="'📂 Select Categories'" [data]="categoryDropdownList"
@@ -41,6 +41,10 @@
 
   <div class="d-flex justify-content-between align-items-center mb-3">
     <button class="btn btn-success" (click)="navigateBack()">← Back to Stores</button>
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
     <button class="btn btn-success" (click)="openAddModal()">
       <i class="bi bi-plus-circle me-1"></i> Add Stock
     </button>
@@ -50,6 +54,10 @@
   <app-add-stock-modal *ngIf="showAddModal" [storeName]="storeName" [isVisible]="showAddModal"
     (closed)="onAddModalClosed($event)">
   </app-add-stock-modal>
+
+  <app-edit-stock-modal *ngIf="showEditModal" [storeProductId]="selectedStockId" [isVisible]="showEditModal"
+    (closed)="onEditModalClosed($event)">
+  </app-edit-stock-modal>
 
   <hr class="my-4 border border-secondary" />
 
@@ -71,6 +79,7 @@
             Stock {{ getSortArrow('Stock') }}
           </th>
           <th>Image</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -83,12 +92,26 @@
             <img [src]="product.ImagePath ? backendImageUrl + product.ImagePath : fallbackImage" class="img-thumbnail"
               style="width: 50px; height: auto;" />
           </td>
+         <td class="text-center">
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-outline-primary btn-sm d-flex align-items-center"
+                      (click)="openEditModal(product.StoreProductId)">
+                <i class="bi bi-pencil-fill me-1"></i> Edit
+              </button>
+              <button class="btn btn-outline-danger btn-sm d-flex align-items-center"
+                      (click)="deleteStock(product.StoreProductId)">
+                <i class="bi bi-trash-fill me-1"></i> Delete
+              </button>
+            </div>
+          </td>
+
+
         </tr>
       </tbody>
     </table>
   </div>
 
-    <!-- 
+  <!-- 
   <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
     <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="filters.page === 1">
       ⬅️ Previous
@@ -114,3 +137,6 @@
   </nav>
 
 </div>
+
+<ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-spin-clockwise" [fullScreen]="true">
+</ngx-spinner>
