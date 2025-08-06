@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./store-list.component.css']
 })
 export class StoreListComponent implements OnInit {
-  stores: any; 
+  stores: any[] = [];
   error = '';
 
   constructor(
@@ -36,4 +36,8 @@ export class StoreListComponent implements OnInit {
   viewStock(storeName: string) {
     this.router.navigate(['/store', storeName, 'stock']);
   }
+
+  addStore() {
+  this.router.navigate(['/store/add']);
+}
 }

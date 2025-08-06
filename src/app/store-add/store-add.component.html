@@ -1,0 +1,91 @@
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Add Store with Products</h4>
+        </div>
+        <div class="card-body">
+            <form (ngSubmit)="onSubmit()" #formRef="ngForm">
+                <!-- Store Name -->
+                <div class="mb-3">
+                    <label for="storeName" class="form-label">Store Name</label>
+                    <input type="text" id="storeName" [(ngModel)]="model.storeName" name="storeName"
+                        class="form-control" required placeholder="Enter Store Name" />
+                </div>
+
+                <!-- Store Type -->
+                <div class="mb-3">
+                    <label for="storeTypeId" class="form-label">Store Type</label>
+                    <select [(ngModel)]="model.storeTypeId" name="storeTypeId" id="storeTypeId"
+                        class="form-select text-dark" required>
+                        <option value="" disabled hidden>-- Select Store Type --</option>
+                        <option *ngFor="let type of storeTypes" [value]="type.storeTypeId">
+                            {{ type.storeTypeName }}
+                        </option>
+                    </select>
+                </div>
+
+                <hr />
+
+                <!-- Products Section -->
+                <h5>Products</h5>
+                <div *ngFor="let p of model.products; let i = index" class="border rounded p-3 mb-3">
+                    <div class="row g-2">
+                        <!-- Product Dropdown -->
+                        <div class="col-md-3">
+                            <label class="form-label">Product</label>
+                            <select [(ngModel)]="p.productId" name="productId{{i}}" class="form-select" required>
+                                <option value="" disabled hidden>-- Select Product --</option>
+                                <option *ngFor="let prod of getFilteredProducts(i)" [value]="prod.productId">
+                                    {{ prod.productName }}
+                                </option>
+                            </select>
+
+
+
+                        </div>
+
+                        <!-- Store Price -->
+                        <div class="col-md-3">
+                            <label class="form-label">Price</label>
+                            <input type="number" [(ngModel)]="p.storePrice" name="price{{i}}" class="form-control"
+                                placeholder="Price" required />
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="col-md-3">
+                            <label class="form-label">Stock</label>
+                            <input type="number" [(ngModel)]="p.stock" name="stock{{i}}" class="form-control"
+                                placeholder="Stock" required />
+                        </div>
+
+                        <!-- Optional Image Path -->
+                        <!-- Optional Image Upload -->
+                        <div class="col-md-3">
+                            <label class="form-label">Product Image (Optional)</label>
+                            <input type="file" class="form-control" (change)="onProductImageSelected($event, i)" />
+                        </div>
+
+                    </div>
+
+                    <div class="text-end mt-2">
+                        <button type="button" (click)="removeProduct(i)" class="btn btn-outline-danger btn-sm">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add Product Button -->
+                <button type="button" class="btn btn-secondary mb-3" (click)="addProduct()">
+                    + Add Product
+                </button>
+
+                <!-- Submit -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -5,6 +5,12 @@
     {{ error }}
   </div>
 
+    <div class="mb-2 text-end">
+    <button class="btn btn-success" (click)="addStore()">
+      <i class="bi bi-plus-circle"></i> Add Store
+    </button>
+  </div>
+  
   <table *ngIf="stores.length > 0" class="table table-bordered table-striped">
     <thead class="table-dark">
       <tr>

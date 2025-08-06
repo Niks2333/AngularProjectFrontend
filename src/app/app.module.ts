@@ -15,6 +15,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditStockModalComponent } from './components/edit-stock-modal/edit-stock-modal.component';
+import { StoreAddComponent } from './store-add/store-add.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { EditStockModalComponent } from './components/edit-stock-modal/edit-stoc
     AddStockModalComponent,
     LayoutComponent,
     EditStockModalComponent,
+    StoreAddComponent,
     
   ],
   imports: [

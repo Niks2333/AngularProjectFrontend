@@ -1,0 +1,14 @@
+select, option {
+  color: black !important;
+  background-color: white !important;
+}
+
+.card {
+  border-radius: 1rem;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  font-size: 0.95rem;
+}
