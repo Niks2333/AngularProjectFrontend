@@ -52,12 +52,20 @@ export class StoreAddComponent {
       storePrice: 0, 
       stock: 0, 
       imagePath: '', 
-      imageFile: null  // <-- Add imageFile property to hold the actual file
+      imageFile: null 
     });
   }
+  trackByIndex(index: number, item: any): number {
+  return index;
+}
+isProductSelected(productId: number, currentIndex: number): boolean {
+  return this.model.products.some((p, idx) => idx !== currentIndex && p.productId === productId);
+}
+
+
   getFilteredProducts(currentIndex: number) {
   const selectedProductIds = this.model.products
-    .filter((_, index) => index !== currentIndex) // exclude current row
+    .filter((_, index) => index !== currentIndex) 
     .map(p => p.productId);
 
   return this.products.filter(prod =>
@@ -71,12 +79,12 @@ export class StoreAddComponent {
     this.model.products.splice(index, 1);
   }
 
-  // For store image
+  
   onImageSelected(event: any) {
     this.model.storeImage = event.target.files[0];
   }
 
-  // For individual product image
+
   onProductImageSelected(event: any, index: number) {
     const file = event.target.files[0];
     if (file) {
@@ -94,19 +102,19 @@ export class StoreAddComponent {
       formData.append('storeImage', this.model.storeImage);
     }
 
-    // Append all product images if selected
+ 
     this.model.products.forEach((p, index) => {
       if (p.imageFile) {
         formData.append(`productImage_${index}`, p.imageFile);
       }
     });
 
-    // Append product data (excluding imageFile to avoid circular JSON issues)
+    
     const productsWithoutFiles = this.model.products.map(p => ({
       productId: p.productId,
       storePrice: p.storePrice,
       stock: p.stock,
-      imagePath: p.imagePath  // optional text path if any
+      imagePath: p.imagePath  
     }));
     formData.append('products', JSON.stringify(productsWithoutFiles));
 

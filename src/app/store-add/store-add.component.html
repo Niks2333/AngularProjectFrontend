@@ -5,14 +5,14 @@
         </div>
         <div class="card-body">
             <form (ngSubmit)="onSubmit()" #formRef="ngForm">
-                <!-- Store Name -->
+
                 <div class="mb-3">
                     <label for="storeName" class="form-label">Store Name</label>
                     <input type="text" id="storeName" [(ngModel)]="model.storeName" name="storeName"
                         class="form-control" required placeholder="Enter Store Name" />
                 </div>
 
-                <!-- Store Type -->
+
                 <div class="mb-3">
                     <label for="storeTypeId" class="form-label">Store Type</label>
                     <select [(ngModel)]="model.storeTypeId" name="storeTypeId" id="storeTypeId"
@@ -28,14 +28,17 @@
 
                 <!-- Products Section -->
                 <h5>Products</h5>
-                <div *ngFor="let p of model.products; let i = index" class="border rounded p-3 mb-3">
+                <div *ngFor="let p of model.products; let i = index; trackBy: trackByIndex"
+                    class="border rounded p-3 mb-3">
+
                     <div class="row g-2">
                         <!-- Product Dropdown -->
                         <div class="col-md-3">
                             <label class="form-label">Product</label>
                             <select [(ngModel)]="p.productId" name="productId{{i}}" class="form-select" required>
                                 <option value="" disabled hidden>-- Select Product --</option>
-                                <option *ngFor="let prod of getFilteredProducts(i)" [value]="prod.productId">
+                                <option *ngFor="let prod of products" [value]="prod.productId"
+                                    [disabled]="isProductSelected(prod.productId, i)">
                                     {{ prod.productName }}
                                 </option>
                             </select>
@@ -58,8 +61,7 @@
                                 placeholder="Stock" required />
                         </div>
 
-                        <!-- Optional Image Path -->
-                        <!-- Optional Image Upload -->
+                       
                         <div class="col-md-3">
                             <label class="form-label">Product Image (Optional)</label>
                             <input type="file" class="form-control" (change)="onProductImageSelected($event, i)" />
