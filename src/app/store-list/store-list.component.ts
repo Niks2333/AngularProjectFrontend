@@ -16,13 +16,13 @@ export class StoreListComponent implements OnInit {
   constructor(
     private storeService: StoreService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.storeService.getStores().subscribe({
       next: (data: any) => {
         console.log('Raw API data:', data);
-       // debugger;
+        // debugger;
         this.stores = data;
         console.log('Processed stores:', this.stores);
       },
@@ -38,6 +38,6 @@ export class StoreListComponent implements OnInit {
   }
 
   addStore() {
-  this.router.navigate(['/store/add']);
-}
+    this.router.navigate(['/store/add']);
+  }
 }

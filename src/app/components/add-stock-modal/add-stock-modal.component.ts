@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StoreStockService } from 'src/app/services/stock.service';
 import { WebAddStockViewModel } from 'src/app/models/web-add-stock.model';
 
@@ -12,31 +11,33 @@ export class AddStockModalComponent implements OnInit {
   @Input() storeName!: string;
   @Input() isVisible = false;
   @Output() closed = new EventEmitter<boolean>();
-  form!: FormGroup;
+
+  model: WebAddStockViewModel = {
+    StoreName: '',
+    ProductName: '',
+    StorePrice: 0,
+    Stock: 0
+  };
+
   availableProducts: string[] = [];
   selectedFile!: File;
 
-  constructor(private fb: FormBuilder, private stockService: StoreStockService) {}
-ngOnInit() {
-this.form = this.fb.group({
-  ProductName: ['', Validators.required],
-  StorePrice: ['', [Validators.required, Validators.min(1)]],
-  Stock: ['', [Validators.required, Validators.min(0)]],
-});
+  constructor(private stockService: StoreStockService) {}
 
+  ngOnInit() {
+   
+    this.model.StoreName = this.storeName;
 
-  console.log('Fetching available products for store:', this.storeName);
-
-  this.stockService.getAddStockFormData(this.storeName).subscribe({
-    next: (data) => {
-      this.availableProducts = data.AvailableProducts ?? [];
-      console.log('Available Products:', this.availableProducts); 
-    },
-    error: (err) => {
-      console.error('Failed to fetch available products', err);
-    }
-  });
-}
+    
+    this.stockService.getAddStockFormData(this.storeName).subscribe({
+      next: (data) => {
+        this.availableProducts = data.AvailableProducts ?? [];
+      },
+      error: (err) => {
+        console.error('Failed to fetch available products', err);
+      }
+    });
+  }
 
   onFileChange(event: any) {
     const file = event.target.files[0];
@@ -45,39 +46,33 @@ this.form = this.fb.group({
     }
   }
 
-submit() {
-  if (this.form.invalid) {
-    this.form.markAllAsTouched(); 
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('StoreName', this.storeName);
-  formData.append('ProductName', this.form.value.ProductName);
-  formData.append('StorePrice', this.form.value.StorePrice);
-  formData.append('Stock', this.form.value.Stock);
-  if (this.selectedFile) {
-    formData.append('ImageFile', this.selectedFile);
-  }
-
-  this.stockService.addStock(formData).subscribe({
-    next: (res: any) => {
-      if (res.success) {
-        this.close(true); 
-      } else {
-        
-        this.form.setErrors({ apiError: res.message }); 
-      }
-    },
-    error: err => {
-      this.form.setErrors({ apiError: 'Failed to add stock.' });
+  submit() {
+    if (!this.model.ProductName || this.model.StorePrice <= 0|| this.model.Stock<0) {
+      alert('Please fill all required fields correctly.');
+      return;
     }
-  });
-}
 
+    const formData = new FormData();
+    formData.append('Data', JSON.stringify(this.model));
+    if (this.selectedFile) {
+      formData.append('ImageFile', this.selectedFile);
+    }
+
+    this.stockService.addStock(formData).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.close(true);
+        } else {
+          alert(res.message || 'Failed to add stock.');
+        }
+      },
+      error: () => {
+        alert('Error occurred while adding stock.');
+      }
+    });
+  }
 
   close(refresh: boolean = false) {
     this.closed.emit(refresh);
   }
-  
 }

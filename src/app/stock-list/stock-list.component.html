@@ -92,14 +92,14 @@
             <img [src]="product.ImagePath ? backendImageUrl + product.ImagePath : fallbackImage" class="img-thumbnail"
               style="width: 50px; height: auto;" />
           </td>
-         <td class="text-center">
+          <td class="text-center">
             <div class="d-flex justify-content-center gap-2">
               <button class="btn btn-outline-primary btn-sm d-flex align-items-center"
-                      (click)="openEditModal(product.StoreProductId)">
+                (click)="openEditModal(product.StoreProductId)">
                 <i class="bi bi-pencil-fill me-1"></i> Edit
               </button>
               <button class="btn btn-outline-danger btn-sm d-flex align-items-center"
-                      (click)="deleteStock(product.StoreProductId)">
+                (click)="deleteStock(product.StoreProductId)">
                 <i class="bi bi-trash-fill me-1"></i> Delete
               </button>
             </div>

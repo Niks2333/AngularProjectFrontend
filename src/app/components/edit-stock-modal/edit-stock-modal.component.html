@@ -7,22 +7,35 @@
         <h5 class="modal-title">✏️ Edit Stock</h5>
         <button type="button" class="btn-close" (click)="close()"></button>
       </div>
+
       <div class="modal-body">
-        <form [formGroup]="editForm" (ngSubmit)="submit()">
+        <form (ngSubmit)="submit()" #editStockForm="ngForm">
+
+          <input type="hidden" [(ngModel)]="model.StoreProductId" name="StoreProductId" />
 
           <div class="mb-3">
             <label class="form-label fw-bold">Product</label>
-            <input type="text" class="form-control" formControlName="ProductName" readonly />
+            <input type="text" class="form-control" [(ngModel)]="model.ProductName" name="ProductName" readonly />
           </div>
 
+         
           <div class="mb-3">
             <label class="form-label fw-bold">Price</label>
-            <input type="number" class="form-control" formControlName="StorePrice" />
+            <input type="number" class="form-control" [(ngModel)]="model.StorePrice" name="StorePrice"
+                   min="0" required />
+            <div *ngIf="editStockForm.submitted && model.StorePrice < 0" class="text-danger small">
+              Price must be 0 or more.
+            </div>
           </div>
 
+        
           <div class="mb-3">
             <label class="form-label fw-bold">Stock</label>
-            <input type="number" class="form-control" formControlName="Stock" />
+            <input type="number" class="form-control" [(ngModel)]="model.Stock" name="Stock"
+                   min="0" required />
+            <div *ngIf="editStockForm.submitted && model.Stock < 0" class="text-danger small">
+              Stock must be 0 or more.
+            </div>
           </div>
 
           <div class="mb-3">
@@ -32,9 +45,10 @@
           </div>
 
           <div class="modal-footer">
-            <button type="submit" class="btn btn-success" [disabled]="editForm.invalid">💾 Save</button>
+            <button type="submit" class="btn btn-success">💾 Save</button>
             <button type="button" class="btn btn-secondary" (click)="close()">❌ Cancel</button>
           </div>
+
         </form>
       </div>
     </div>

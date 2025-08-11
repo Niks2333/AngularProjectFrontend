@@ -1,76 +1,82 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { StoreStockService } from 'src/app/services/stock.service';
+import { WebEditStockViewModel } from 'src/app/models/web-edit-stock.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-edit-stock-modal',
   templateUrl: './edit-stock-modal.component.html',
   styleUrls: ['./edit-stock-modal.component.css']
 })
-export class EditStockModalComponent implements OnInit {
+export class EditStockModalComponent implements OnInit, OnChanges {
   @Input() storeProductId!: number;
-  @Input() isVisible: boolean = false;
+  @Input() isVisible = false;
   @Output() closed = new EventEmitter<boolean>();
 
-  editForm!: FormGroup;
-  imagePreview: string = '';
-  backendImageUrl = 'http://localhost:56262/Content/images/';
+  model: WebEditStockViewModel = {
+    StoreProductId: 0,
+    StorePrice: 0,
+    Stock: 0,
+    StoreName: '',
+    ProductName: '',
+    ImagePath: ''
+  };
 
-  constructor(private fb: FormBuilder, private stockService: StoreStockService) {}
+  selectedFile?: File;
+  imagePreview = '';
+  backendImageUrl = environment.apiBaseUrl+ '/Content/images/';
+
+  constructor(private stockService: StoreStockService) {}
 
   ngOnInit(): void {
-    this.initForm();
-
     if (this.storeProductId) {
-      this.stockService.getEditStockFormData(this.storeProductId).subscribe({
-        next: (data) => {
-          this.editForm.patchValue(data);
-          this.imagePreview = this.backendImageUrl + data.ImagePath;
-        }
-      });
+      this.loadStockData();
     }
   }
 
-  initForm() {
-  this.editForm = this.fb.group({
-    StoreProductId: [0],
-    StorePrice: [0, [Validators.required, Validators.min(1)]], 
-    Stock: [0, [Validators.required, Validators.min(0)]],       
-    StoreName: [''],
-    ProductName: [''],
-    ImageFile: [null]
-  });
-}
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['storeProductId'] && this.storeProductId) {
+      this.loadStockData();
+    }
+  }
 
+  loadStockData() {
+    this.stockService.getEditStockFormData(this.storeProductId).subscribe({
+      next: (data) => {
+        this.model = { ...data };
+        this.imagePreview = data.ImagePath ? this.backendImageUrl + data.ImagePath : '';
+      },
+      error: (err) => console.error(err)
+    });
+  }
 
   onImageChange(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.editForm.patchValue({ ImageFile: file });
-
+      this.selectedFile = file;
       const reader = new FileReader();
-      reader.onload = e => this.imagePreview = reader.result as string;
+      reader.onload = () => this.imagePreview = reader.result as string;
       reader.readAsDataURL(file);
     }
   }
 
   submit() {
-    const formData = new FormData();
-    Object.entries(this.editForm.value).forEach(([key, value]) => {
-      formData.append(key, value as any);
-    });
+    if (this.model.StorePrice < 0 || this.model.Stock < 0) {
+      return;
+    }
 
-    if (this.editForm.value.ImageFile) {
-      formData.append('ImageFile', this.editForm.value.ImageFile);
+    const formData = new FormData();
+    formData.append('model', JSON.stringify(this.model));
+    if (this.selectedFile) {
+      formData.append('ImageFile', this.selectedFile);
     }
 
     this.stockService.updateStock(formData).subscribe({
       next: (res: any) => {
         if (res.success) {
-          //alert("✅ Stock updated!");
           this.closed.emit(true);
         } else {
-          alert("❌ Error: " + res.message);
+          alert('❌ Error: ' + res.message);
         }
       }
     });

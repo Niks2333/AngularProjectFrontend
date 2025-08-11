@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { StoreService } from '../services/store.service';
 import { AddStoreWithProducts } from '../models/add-store-with-products.model';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-store-add',
@@ -12,19 +14,22 @@ export class StoreAddComponent {
     storeName: '',
     storeTypeId: 0,
     createdBy: 'Niks23',
-    storeImage: null,
     products: []
   };
 
+  productImageFiles: (File | null)[] = [];
   storeTypes: any[] = [];
   products: { productId: number; productName: string }[] = [];
 
-  constructor(private storeService: StoreService) {}
+  constructor(
+    private storeService: StoreService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.loadProducts();
     this.loadStoreTypes();
-    this.addProduct();  
+    this.addProduct();
   }
 
   loadStoreTypes() {
@@ -38,7 +43,6 @@ export class StoreAddComponent {
 
   loadProducts() {
     this.storeService.getAllProducts().subscribe(data => {
-      console.log('Products loaded from API:', data);
       this.products = data.map(p => ({
         productId: p.ProductId,
         productName: p.ProductName
@@ -47,81 +51,73 @@ export class StoreAddComponent {
   }
 
   addProduct() {
-    this.model.products.push({ 
-      productId: 0, 
-      storePrice: 0, 
-      stock: 0, 
-      imagePath: '', 
-      imageFile: null 
+    this.model.products.push({
+      productId: 0,
+      storePrice: 0,
+      stock: 0,
+      imagePath: ''
     });
+    this.productImageFiles.push(null);
   }
-  trackByIndex(index: number, item: any): number {
-  return index;
-}
-isProductSelected(productId: number, currentIndex: number): boolean {
-  return this.model.products.some((p, idx) => idx !== currentIndex && p.productId === productId);
-}
 
+  removeProduct(index: number) {
+    this.model.products.splice(index, 1);
+    this.productImageFiles.splice(index, 1);
+  }
 
-  getFilteredProducts(currentIndex: number) {
-  const selectedProductIds = this.model.products
-    .filter((_, index) => index !== currentIndex) 
+  trackByIndex(index: number): number {
+    return index;
+  }
+
+getFilteredProducts(currentIndex: number) {
+  const selectedIds = this.model.products
+    .filter((p, idx) => idx !== currentIndex && p.productId > 0)
     .map(p => p.productId);
 
   return this.products.filter(prod =>
-    !selectedProductIds.includes(prod.productId) || 
+    !selectedIds.includes(prod.productId) ||
     prod.productId === this.model.products[currentIndex].productId
   );
 }
 
 
-  removeProduct(index: number) {
-    this.model.products.splice(index, 1);
-  }
-
-  
-  onImageSelected(event: any) {
-    this.model.storeImage = event.target.files[0];
-  }
-
-
   onProductImageSelected(event: any, index: number) {
     const file = event.target.files[0];
-    if (file) {
-      this.model.products[index].imageFile = file;
-    }
+    this.productImageFiles[index] = file || null;
   }
 
   onSubmit() {
     const formData = new FormData();
-    formData.append('storeName', this.model.storeName);
-    formData.append('storeTypeId', this.model.storeTypeId.toString());
-    formData.append('createdBy', this.model.createdBy);
 
-    if (this.model.storeImage) {
-      formData.append('storeImage', this.model.storeImage);
-    }
+    
+    formData.append('model', JSON.stringify(this.model));
 
- 
-    this.model.products.forEach((p, index) => {
-      if (p.imageFile) {
-        formData.append(`productImage_${index}`, p.imageFile);
+    
+    this.productImageFiles.forEach((file, index) => {
+      if (file) {
+        formData.append(`productImage_${index}`, file);
       }
     });
 
-    
-    const productsWithoutFiles = this.model.products.map(p => ({
-      productId: p.productId,
-      storePrice: p.storePrice,
-      stock: p.stock,
-      imagePath: p.imagePath  
-    }));
-    formData.append('products', JSON.stringify(productsWithoutFiles));
-
     this.storeService.addStoreWithProducts(formData).subscribe({
-      next: () => alert('Store & Products added!'),
-      error: err => alert('Error while adding store.')
+      next: () => {
+        Swal.fire({
+          title: '🎉 Store Added!',
+          text: 'The store and products were added successfully.',
+          icon: 'success',
+          timer: 3000,
+          timerProgressBar: true
+        }).then(() => {
+          this.router.navigateByUrl('/');
+        });
+      },
+      error: () => {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong while adding the store.',
+          icon: 'error'
+        });
+      }
     });
-    
   }
 }
