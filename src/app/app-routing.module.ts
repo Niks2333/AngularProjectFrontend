@@ -21,6 +21,7 @@ const routes: Routes = [
       { path: 'store/:storeName/stock', component: StockListComponent },
       { path: 'stock/:storeName', component: StockListComponent },
       { path: 'store/add', component: StoreAddComponent },
+      { path: 'store-edit/:storeName', component: StoreAddComponent },
     ]
   }
 ];

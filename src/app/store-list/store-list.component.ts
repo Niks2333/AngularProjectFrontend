@@ -1,6 +1,4 @@
-
 import { Component, OnInit } from '@angular/core';
-import { Store } from '../models/store.model';
 import { StoreService } from '../services/store.service';
 import { Router } from '@angular/router';
 
@@ -22,7 +20,6 @@ export class StoreListComponent implements OnInit {
     this.storeService.getStores().subscribe({
       next: (data: any) => {
         console.log('Raw API data:', data);
-        // debugger;
         this.stores = data;
         console.log('Processed stores:', this.stores);
       },
@@ -34,10 +31,12 @@ export class StoreListComponent implements OnInit {
   }
 
   viewStock(storeName: string) {
+    
     this.router.navigate(['/store', storeName, 'stock']);
   }
 
   addStore() {
+    
     this.router.navigate(['/store/add']);
   }
 }

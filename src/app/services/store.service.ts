@@ -18,14 +18,21 @@ export class StoreService {
   addStoreWithProducts(formData: FormData): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}/store/add-with-products`, formData);
   }
-getStoreTypes(): Observable<any[]> {
-  return this.http.get<any[]>(`${environment.apiBaseUrl}/store/storetypes`);
-}
-getAllProducts(): Observable<any[]> {
-  return this.http.get<any[]>(`${environment.apiBaseUrl}/store/productlist`);
-}
+  getStoreTypes(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}/store/storetypes`);
+  }
+  getAllProducts(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}/store/productlist`);
+  }
 
 
+  updateStoreWithProducts(formData: FormData) {
+    return this.http.post(`${environment.apiBaseUrl}/store/update-with-products`, formData);
+  }
+
+  getStoreWithProducts(storeName: string) {
+    return this.http.get<any>(`${environment.apiBaseUrl}/store/get-with-products/${encodeURIComponent(storeName)}`);
+  }
 
 
 }
