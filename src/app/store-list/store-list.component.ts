@@ -10,33 +10,32 @@ import { Router } from '@angular/router';
 export class StoreListComponent implements OnInit {
   stores: any[] = [];
   error = '';
-
+ 
   constructor(
     private storeService: StoreService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    
     this.storeService.getStores().subscribe({
       next: (data: any) => {
-        console.log('Raw API data:', data);
+        //console.log('Raw API data:', data);
         this.stores = data;
-        console.log('Processed stores:', this.stores);
+        //console.log('Processed stores:', this.stores);
       },
       error: (err) => {
         this.error = 'Failed to load store data';
-        console.error(err);
+        //console.error(err);
       }
     });
   }
 
   viewStock(storeName: string) {
-    
     this.router.navigate(['/store', storeName, 'stock']);
   }
 
   addStore() {
-    
     this.router.navigate(['/store/add']);
   }
 }

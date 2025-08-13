@@ -12,23 +12,17 @@ export class AddStockModalComponent implements OnInit {
   @Input() isVisible = false;
   @Output() closed = new EventEmitter<boolean>();
 
-  model: WebAddStockViewModel = {
-    StoreName: '',
-    ProductName: '',
-    StorePrice: 0,
-    Stock: 0
-  };
-
+  model!: WebAddStockViewModel;  
   availableProducts: string[] = [];
-  selectedFile!: File;
+  selectedFile?: File;
 
   constructor(private stockService: StoreStockService) {}
 
   ngOnInit() {
-   
-    this.model.StoreName = this.storeName;
-
     
+    this.model = new WebAddStockViewModel(this.storeName);
+
+   
     this.stockService.getAddStockFormData(this.storeName).subscribe({
       next: (data) => {
         this.availableProducts = data.AvailableProducts ?? [];
@@ -47,7 +41,7 @@ export class AddStockModalComponent implements OnInit {
   }
 
   submit() {
-    if (!this.model.ProductName || this.model.StorePrice <= 0|| this.model.Stock<0) {
+    if (!this.model.ProductName || this.model.StorePrice <= 0 || this.model.Stock < 0) {
       alert('Please fill all required fields correctly.');
       return;
     }

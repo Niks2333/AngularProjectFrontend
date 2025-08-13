@@ -13,18 +13,10 @@ export class EditStockModalComponent implements OnInit, OnChanges {
   @Input() isVisible = false;
   @Output() closed = new EventEmitter<boolean>();
 
-  model: WebEditStockViewModel = {
-    StoreProductId: 0,
-    StorePrice: 0,
-    Stock: 0,
-    StoreName: '',
-    ProductName: '',
-    ImagePath: ''
-  };
-
+  model = new WebEditStockViewModel();
   selectedFile?: File;
   imagePreview = '';
-  backendImageUrl = environment.apiBaseUrl+ '/Content/images/';
+  backendImageUrl = environment.apiBaseUrl + '/Content/images/';
 
   constructor(private stockService: StoreStockService) {}
 
@@ -43,7 +35,7 @@ export class EditStockModalComponent implements OnInit, OnChanges {
   loadStockData() {
     this.stockService.getEditStockFormData(this.storeProductId).subscribe({
       next: (data) => {
-        this.model = { ...data };
+        this.model = new WebEditStockViewModel(data);
         this.imagePreview = data.ImagePath ? this.backendImageUrl + data.ImagePath : '';
       },
       error: (err) => console.error(err)

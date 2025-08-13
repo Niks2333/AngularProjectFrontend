@@ -15,7 +15,7 @@ export class StockListComponent implements OnInit {
   stockData?: StoreProductViewModel;
   backendImageUrl = 'http://localhost:56262/Content/images/';
   fallbackImage = 'assets/images/image-not-found.png';
-  
+
   successMessage: string = '';
 
   categoryDropdownList: any[] = [];
@@ -33,7 +33,7 @@ export class StockListComponent implements OnInit {
     private stockService: StoreStockService,
     private route: ActivatedRoute,
     private router: Router,
-     private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService
   ) { }
 
   get pageNumbers(): number[] {
@@ -47,9 +47,9 @@ export class StockListComponent implements OnInit {
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
-
     return pages;
   }
+
   dropdownSettings = {
     singleSelection: false,
     idField: 'value',
@@ -59,6 +59,7 @@ export class StockListComponent implements OnInit {
     itemsShowLimit: 3,
     allowSearchFilter: true
   };
+
   goToPage(page: number) {
     if (page !== this.filters.page) {
       this.filters.page = page;
@@ -74,24 +75,24 @@ export class StockListComponent implements OnInit {
   }
 
   fetchStock() {
-      this.spinner.show(undefined, {
-    type: 'ball-spin-clockwise' 
-  });
+    this.spinner.show(undefined, {
+      type: 'ball-spin-clockwise'
+    });
 
     this.stockService.getStockWithParams(this.filters)
       .subscribe({
         next: (data) => {
-           debugger;
+          debugger;
           this.stockData = data;
           this.categoryDropdownList = data.Categories.map(c => ({ value: c }));
-           console.log("📦 Products Received:", this.stockData.Products);
-        this.spinner.hide();
+          //console.log("📦 Products Received:", this.stockData.Products);
+          this.spinner.hide();
         },
-        
-       error: (err) => {
-        console.error('Error fetching stock', err);
-        this.spinner.hide(); 
-      }
+
+        error: (err) => {
+          console.error('Error fetching stock', err);
+          this.spinner.hide();
+        }
       });
   }
 
@@ -122,80 +123,80 @@ export class StockListComponent implements OnInit {
     }
   }
 
-
   showAddModal = false;
 
   openAddModal() {
     this.showAddModal = true;
   }
+
   getSortArrow(column: string): string {
     if (this.filters.sortColumn === column) {
       return this.filters.sortOrder === 'ASC' ? '▲' : '▼';
     } else {
-
       return '⇅';
     }
   }
 
- onAddModalClosed(refresh: boolean) {
-  this.showAddModal = false;
+  onAddModalClosed(refresh: boolean) {
+    this.showAddModal = false;
 
-  if (refresh) {
-    this.successMessage = '✅ Stock added successfully!';
-    this.applyFilters(); 
-   
-    setTimeout(() => {
-      this.successMessage = '';
-    }, 3000);
+    if (refresh) {
+      this.successMessage = '✅ Stock added successfully!';
+      this.applyFilters();
+
+      setTimeout(() => {
+        this.successMessage = '';
+      }, 3000);
+    }
   }
-}
 
   navigateBack() {
     this.router.navigate(['']);
   }
 
-showEditModal = false;
-selectedStockId = 0;
+  showEditModal = false;
+  selectedStockId = 0;
 
-openEditModal(id: number) {
-  this.selectedStockId = id;
-  this.showEditModal = true;
-}
-
-onEditModalClosed(refresh: boolean) {
-  this.showEditModal = false;
-  if (refresh) {
-    this.successMessage = "✅ Stock updated successfully!";
-    this.applyFilters();
-
-    setTimeout(() => this.successMessage = '', 3000);
+  openEditModal(id: number) {
+    this.selectedStockId = id;
+    this.showEditModal = true;
   }
-}
-deleteStock(id: number) {
-  if (confirm('❗ Are you sure you want to delete this stock item?')) {
-    this.spinner.show();
 
-    this.stockService.deleteStock(id).subscribe({
-      
-      next: (res) => {
-        
-        if (res.success) {
-          this.successMessage = "🗑️ Stock deleted successfully!";
-          this.applyFilters(); 
-        } else {
-          alert("❌ Failed to delete: " + res.message);
+  onEditModalClosed(refresh: boolean) {
+    this.showEditModal = false;
+    if (refresh) {
+      this.successMessage = "✅ Stock updated successfully!";
+      this.applyFilters();
+
+      setTimeout(() => this.successMessage = '', 3000);
+    }
+  }
+
+  deleteStock(id: number) {
+    if (confirm('❗ Are you sure you want to delete this stock item?')) {
+      this.spinner.show();
+
+      this.stockService.deleteStock(id).subscribe({
+
+        next: (res) => {
+
+          if (res.success) {
+            this.successMessage = "🗑️ Stock deleted successfully!";
+            this.applyFilters();
+          } else {
+            alert("❌ Failed to delete: " + res.message);
+          }
+          this.spinner.hide();
+          setTimeout(() => this.successMessage = '', 3000);
+        },
+        error: (err) => {
+          console.error('Delete error', err);
+          alert("❌ Unexpected error during deletion.");
+          this.spinner.hide();
         }
-        this.spinner.hide();
-        setTimeout(() => this.successMessage = '', 3000);
-      },
-      error: (err) => {
-        console.error('Delete error', err);
-        alert("❌ Unexpected error during deletion.");
-        this.spinner.hide();
-      }
-    });
+      });
+    }
   }
-}
 
 
 }

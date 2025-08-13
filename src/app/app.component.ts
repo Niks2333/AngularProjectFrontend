@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'InventoryManagementFrontend';
+
+  id:any = 10;
+
+ ngOnInit(): void {
+    localStorage.setItem('id', this.id.toString());
+  }
 }

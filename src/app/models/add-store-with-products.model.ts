@@ -1,13 +1,37 @@
-export interface AddStoreWithProducts {
-  storeName: string;
-  storeTypeId: number;
-  createdBy: string;
-  products: ProductWithOptionalImage[];
+// export interface AddStoreWithProducts {
+//   storeName: string;
+//   storeTypeId: number;
+//   createdBy: string;
+//   products: ProductWithOptionalImage[];
+// }
+
+// export interface ProductWithOptionalImage {
+//   productId: number;
+//   storePrice: number;
+//   stock: number;
+//   imagePath?: string;
+// }
+export class ProductWithOptionalImage {
+  productId = 0;
+  storePrice = 0;
+  stock = 0;
+  imagePath?: string;
+
+  constructor(init?: Partial<ProductWithOptionalImage>) {
+    Object.assign(this, init);
+  }
 }
 
-export interface ProductWithOptionalImage {
-  productId: number;
-  storePrice: number;
-  stock: number;
-  imagePath?: string;
+export class AddStoreWithProducts {
+  storeName = '';
+  storeTypeId = 0;
+  createdBy = '';
+  products: ProductWithOptionalImage[] = [];
+
+  constructor(init?: Partial<AddStoreWithProducts>) {
+    Object.assign(this, init);
+
+    // Ensure products are proper ProductWithOptionalImage instances
+    this.products = (init?.products || []).map(p => new ProductWithOptionalImage(p));
+  }
 }

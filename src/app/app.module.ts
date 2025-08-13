@@ -16,6 +16,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditStockModalComponent } from './components/edit-stock-modal/edit-stock-modal.component';
 import { StoreAddComponent } from './store-add/store-add.component';
+import { LoginComponent } from './login/login.component';
+
 
 @NgModule({
   declarations: [
@@ -26,18 +28,20 @@ import { StoreAddComponent } from './store-add/store-add.component';
     LayoutComponent,
     EditStockModalComponent,
     StoreAddComponent,
-    
+    LoginComponent,
+
+
   ],
   imports: [
     BrowserModule,
-    HttpClientModule ,
+    HttpClientModule,
     AppRoutingModule,
     FormsModule,
-     NgMultiSelectDropDownModule.forRoot(),
+    NgMultiSelectDropDownModule.forRoot(),
     ReactiveFormsModule,
     NgbModule,
-     NgbPaginationModule,
-      BrowserAnimationsModule,
+    NgbPaginationModule,
+    BrowserAnimationsModule,
     NgxSpinnerModule
   ],
   providers: [],
