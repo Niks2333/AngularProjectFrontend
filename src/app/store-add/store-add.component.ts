@@ -3,6 +3,7 @@ import { StoreService } from '../services/store.service';
 import { AddStoreWithProducts, ProductWithOptionalImage } from '../models/add-store-with-products.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-store-add',
@@ -15,6 +16,7 @@ export class StoreAddComponent {
   storeTypes: any[] = [];
   products: { productId: number; productName: string }[] = [];
   isEditMode = false;
+  backendImageUrl2 = 'http://localhost:56262/Content/images/';
 
   constructor(
     private storeService: StoreService,
@@ -66,7 +68,8 @@ export class StoreAddComponent {
           productId: prod.ProductId,
           storePrice: prod.StorePrice,
           stock: prod.Stock,
-          imagePath: prod.ImagePath || ''
+             imagePath: prod.ImagePath || ''
+
         }))
       });
 

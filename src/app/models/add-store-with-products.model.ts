@@ -31,7 +31,7 @@ export class AddStoreWithProducts {
   constructor(init?: Partial<AddStoreWithProducts>) {
     Object.assign(this, init);
 
-    // Ensure products are proper ProductWithOptionalImage instances
+    
     this.products = (init?.products || []).map(p => new ProductWithOptionalImage(p));
   }
 }

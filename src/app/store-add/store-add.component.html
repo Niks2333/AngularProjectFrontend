@@ -57,8 +57,10 @@
                             <label class="form-label">Product Image (Optional)</label>
                             <input type="file" class="form-control" (change)="onProductImageSelected($event, i)" />
                             <small *ngIf="p.imagePath && !productImageFiles[i]" class="text-muted">
-                                Current image: <a href="{{p.imagePath}}" target="_blank">View</a>
+                                Current image:
+                                <a [href]="backendImageUrl2 + p.imagePath" target="_blank">View</a>
                             </small>
+
                         </div>
 
                     </div>
