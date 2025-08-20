@@ -68,7 +68,7 @@ export class StoreAddComponent {
           productId: prod.ProductId,
           storePrice: prod.StorePrice,
           stock: prod.Stock,
-             imagePath: prod.ImagePath || ''
+          imagePath: prod.ImagePath || ''
 
         }))
       });

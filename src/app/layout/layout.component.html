@@ -1,6 +1,4 @@
-
 <div class="d-flex" style="height: 100vh;">
-
   <div [ngClass]="{ 'sidebar': true, 'open': sidebarOpen }">
     <ul class="nav flex-column">
       <li class="nav-item">
@@ -8,6 +6,11 @@
       </li>
       <li class="nav-item">
         <a routerLink="/" class="nav-link text-white">📦 Stock</a>
+      </li>
+
+     
+      <li class="nav-item mt-3" *ngIf="isLoggedIn">
+        <button class="btn btn-danger w-100" (click)="logout()">🚪 Logout</button>
       </li>
     </ul>
   </div>

@@ -10,14 +10,14 @@ import { Router } from '@angular/router';
 export class StoreListComponent implements OnInit {
   stores: any[] = [];
   error = '';
- 
+
   constructor(
     private storeService: StoreService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    
+
     this.storeService.getStores().subscribe({
       next: (data: any) => {
         //console.log('Raw API data:', data);

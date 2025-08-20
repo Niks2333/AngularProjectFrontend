@@ -1,41 +1,33 @@
 import { Component } from '@angular/core';
-import { AuthService } from 'src/app/services/authentication.service';
-import { UserModel } from 'src/app/models/user.model';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { LoginModel } from '../models/login.model';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
+  loginData: LoginModel = new LoginModel();
+  errorMessage = '';
 
-  model: UserModel = new UserModel();
-  otp: string = '';
-  step: 'login' | 'otp' = 'login';
+  constructor(private authService: AuthService, private router: Router) {}
 
-  constructor(private authService: AuthService) { }
+  onSubmit() {
 
-  onLogin() {
-    this.authService.login(this.model).subscribe({
-      next: (res) => {
-        alert(res.message || 'OTP sent!');
-        this.step = 'otp';
+    if (!this.loginData.username || !this.loginData.password) {
+      this.errorMessage = "Both fields are required";
+      return;
+    }
+
+    this.authService.login(this.loginData).subscribe({
+      next: (response: any) => {
+        //console.log(" Login success:", response);
+        this.router.navigate(['/stores']);
       },
       error: (err) => {
-        console.error(err);
-        alert('Login failed');
-      }
-    });
-  }
-
-  onVerifyOtp() {
-    this.authService.verifyOtp(this.otp).subscribe({
-      next: (res) => {
-        alert(res.message || 'Login successful!');
-      },
-      error: (err) => {
-        console.error(err);
-        alert('OTP verification failed');
+       // console.error(" Login failed:", err);
+        this.errorMessage = "Invalid username or password";
       }
     });
   }
