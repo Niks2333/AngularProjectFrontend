@@ -1,85 +1,97 @@
 <div class="container my-4">
 
-  <!-- Optional store name heading -->
-  <!--
+  <!-- Optional store name heading
   <h4 class="text-primary fw-bold mb-3 ms-1">
-    🏬 Showing Stock for: {{ storeName }}
-  </h4>
-  -->
+    🏬 {{ 'stock.storeTitle' | transloco }}: {{ storeName }}
+  </h4> -->
 
   <div class="card shadow-sm p-3 mb-4 border border-primary">
     <div class="card-body">
-      <h5 class="mb-3 text-primary fw-bold">🔧 Filters</h5>
+      <h5 class="mb-3 text-primary fw-bold">🔧 {{ 'stock.filters.title' | transloco }}</h5>
       <div class="row g-3 align-items-center">
 
         <div class="col-md-4">
-          <label class="form-label fw-semibold">Search Product</label>
-          <input type="text" class="form-control" placeholder="🔍 Search Product" [(ngModel)]="filters.search"
-            (input)="applyFilters()" />
+          <label class="form-label fw-semibold">{{ 'stock.filters.search' | transloco }}</label>
+          <input type="text" class="form-control"
+                 [placeholder]="'stock.filters.searchPlaceholder' | transloco"
+                 [(ngModel)]="filters.search"
+                 (input)="applyFilters()" />
         </div>
 
-
         <div class="col-md-4">
-          <label class="form-label fw-semibold">Category</label>
-          <ng-multiselect-dropdown [placeholder]="'📂 Select Categories'" [data]="categoryDropdownList"
-            [(ngModel)]="filters.SelectedCategories" [settings]="dropdownSettings" (onSelect)="applyFilters()"
-            (onDeSelect)="applyFilters()" (onSelectAll)="applyFilters()" (onDeSelectAll)="applyFilters()">
+          <label class="form-label fw-semibold">{{ 'stock.filters.category' | transloco }}</label>
+          <ng-multiselect-dropdown
+            [placeholder]="'stock.filters.categoryPlaceholder' | transloco"
+            [data]="categoryDropdownList"
+            [(ngModel)]="filters.SelectedCategories"
+            [settings]="dropdownSettings"
+            (onSelect)="applyFilters()"
+            (onDeSelect)="applyFilters()"
+            (onSelectAll)="applyFilters()"
+            (onDeSelectAll)="applyFilters()">
           </ng-multiselect-dropdown>
         </div>
 
-
         <div class="col-md-4">
-          <label class="form-label fw-semibold">Items per page</label>
+          <label class="form-label fw-semibold">{{ 'stock.filters.pageSize' | transloco }}</label>
           <select class="form-select" [(ngModel)]="filters.pageSize" (change)="applyFilters()">
-            <option *ngFor="let size of [5, 10, 15, 20]" [value]="size">Show {{ size }}</option>
+            <option *ngFor="let size of [5, 10, 15, 20]" [value]="size">
+              {{ 'stock.filters.show' | transloco }} {{ size }}
+            </option>
           </select>
         </div>
       </div>
     </div>
   </div>
 
-
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <button class="btn btn-success" (click)="navigateBack()">← Back to Stores</button>
+    <button class="btn btn-success" (click)="navigateBack()">
+      ← {{ 'stock.actions.back' | transloco }}
+    </button>
+
     <div *ngIf="successMessage" class="alert alert-success">
       {{ successMessage }}
     </div>
 
     <button class="btn btn-success" (click)="openAddModal()">
-      <i class="bi bi-plus-circle me-1"></i> Add Stock
+      <i class="bi bi-plus-circle me-1"></i> {{ 'stock.actions.add' | transloco }}
     </button>
   </div>
 
-
-  <app-add-stock-modal *ngIf="showAddModal" [storeName]="storeName" [isVisible]="showAddModal"
+  <app-add-stock-modal
+    *ngIf="showAddModal"
+    [storeName]="storeName"
+    [isVisible]="showAddModal"
     (closed)="onAddModalClosed($event)">
   </app-add-stock-modal>
 
-  <app-edit-stock-modal *ngIf="showEditModal" [storeProductId]="selectedStockId" [isVisible]="showEditModal"
+  <app-edit-stock-modal
+    *ngIf="showEditModal"
+    [storeProductId]="selectedStockId"
+    [isVisible]="showEditModal"
     (closed)="onEditModalClosed($event)">
   </app-edit-stock-modal>
 
   <hr class="my-4 border border-secondary" />
-
 
   <div class="table-responsive shadow-sm rounded mb-4 border border-secondary p-2">
     <table class="table table-bordered table-striped table-hover align-middle">
       <thead class="table-light">
         <tr>
           <th (click)="sortBy('ProductName')" style="cursor: pointer;">
-            Product {{ getSortArrow('ProductName') }}
+            {{ 'stock.table.product' | transloco }} {{ getSortArrow('ProductName') }}
           </th>
           <th (click)="sortBy('CategoryName')" style="cursor: pointer;">
-            Category {{ getSortArrow('CategoryName') }}
+            {{ 'stock.table.category' | transloco }} {{ getSortArrow('CategoryName') }}
           </th>
           <th (click)="sortBy('StorePrice')" style="cursor: pointer;">
-            Price {{ getSortArrow('StorePrice') }}
+            {{ 'stock.table.price' | transloco }} {{ getSortArrow('StorePrice') }}
           </th>
           <th (click)="sortBy('Stock')" style="cursor: pointer;">
-            Stock {{ getSortArrow('Stock') }}
+            {{ 'stock.table.stock' | transloco }} {{ getSortArrow('Stock') }}
           </th>
-          <th>Image</th>
-          <th>Actions</th>
+          <th>{{ 'stock.table.image' | transloco }}</th>
+          <th>{{ 'stock.table.actions' | transloco }}</th>
         </tr>
       </thead>
       <tbody>
@@ -89,54 +101,40 @@
           <td>₹{{ product.StorePrice }}</td>
           <td>{{ product.Stock }}</td>
           <td>
-            <img [src]="product.ImagePath ? backendImageUrl + product.ImagePath : fallbackImage" class="img-thumbnail"
-              style="width: 50px; height: auto;" />
+            <img [src]="product.ImagePath ? backendImageUrl + product.ImagePath : fallbackImage"
+                 class="img-thumbnail"
+                 style="width: 50px; height: auto;" />
           </td>
           <td class="text-center">
             <div class="d-flex justify-content-center gap-2">
               <button class="btn btn-outline-primary btn-sm d-flex align-items-center"
-                (click)="openEditModal(product.StoreProductId)">
-                <i class="bi bi-pencil-fill me-1"></i> Edit
+                      (click)="openEditModal(product.StoreProductId)">
+                <i class="bi bi-pencil-fill me-1"></i> {{ 'stock.actions.edit' | transloco }}
               </button>
               <button class="btn btn-outline-danger btn-sm d-flex align-items-center"
-                (click)="deleteStock(product.StoreProductId)">
-                <i class="bi bi-trash-fill me-1"></i> Delete
+                      (click)="deleteStock(product.StoreProductId)">
+                <i class="bi bi-trash-fill me-1"></i> {{ 'stock.actions.delete' | transloco }}
               </button>
             </div>
           </td>
-
-
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 
-  <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3">
-    <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="filters.page === 1">
-      ⬅️ Previous
-    </button>
-
-    <ng-container *ngFor="let page of pageNumbers">
-      <button class="btn"
-        [ngClass]="{ 'btn-primary': filters.page === page, 'btn-outline-secondary': filters.page !== page }"
-        (click)="goToPage(page)">
-        {{ page }}
-      </button>
-    </ng-container>
-
-    <button class="btn btn-outline-primary" (click)="nextPage()"
-      [disabled]="stockData && (filters.page * filters.pageSize >= stockData.TotalCount)">
-      Next ➡️
-    </button>
-  </div>       -->
   <nav class="d-flex justify-content-center mt-3">
-    <ngb-pagination [collectionSize]="stockData?.TotalCount || 0" [(page)]="filters.page" [pageSize]="filters.pageSize"
-      [maxSize]="5" [boundaryLinks]="true" [rotate]="true" (pageChange)="fetchStock()">
+    <ngb-pagination
+      [collectionSize]="stockData?.TotalCount || 0"
+      [(page)]="filters.page"
+      [pageSize]="filters.pageSize"
+      [maxSize]="5"
+      [boundaryLinks]="true"
+      [rotate]="true"
+      (pageChange)="fetchStock()">
     </ngb-pagination>
   </nav>
-
 </div>
 
-<ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-spin-clockwise" [fullScreen]="true">
+<ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff"
+             type="ball-spin-clockwise" [fullScreen]="true">
 </ngx-spinner>

@@ -19,6 +19,12 @@
     <nav class="navbar navbar-dark bg-dark px-3">
       <button class="btn btn-outline-light" (click)="toggleSidebar()">☰</button>
       <span class="navbar-brand mb-0 ms-3">Inventory Management</span>
+       <button 
+    *ngIf="onStockPage" 
+    class="btn btn-outline-info ms-auto"
+    (click)="switchLanguage()">
+    🌐 {{ currentLang | uppercase }}
+  </button>
     </nav>
 
     <main class="container-fluid mt-3">

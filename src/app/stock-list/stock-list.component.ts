@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
 import { StoreStockService } from '../services/stock.service';
 import { StoreProductViewModel } from '../models/store-product-view.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-stock-list',
@@ -17,7 +17,6 @@ export class StockListComponent implements OnInit {
   fallbackImage = 'assets/images/image-not-found.png';
 
   successMessage: string = '';
-
   categoryDropdownList: any[] = [];
 
   filters = {
@@ -29,43 +28,24 @@ export class StockListComponent implements OnInit {
     sortColumn: 'ProductName',
     sortOrder: 'ASC' as 'ASC' | 'DESC'
   };
+
   constructor(
     private stockService: StoreStockService,
     private route: ActivatedRoute,
     private router: Router,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private transloco: TranslocoService
   ) { }
-
-  get pageNumbers(): number[] {
-    const totalPages = Math.ceil((this.stockData?.TotalCount || 0) / this.filters.pageSize);
-    const currentPage = this.filters.page;
-    const pages: number[] = [];
-
-    const start = Math.max(currentPage - 2, 1);
-    const end = Math.min(currentPage + 3, totalPages);
-
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
 
   dropdownSettings = {
     singleSelection: false,
     idField: 'value',
     textField: 'value',
-    selectAllText: 'Select All',
-    unSelectAllText: 'Unselect All',
+    selectAllText: this.transloco.translate('stock.filters.selectAll'),
+    unSelectAllText: this.transloco.translate('stock.filters.unselectAll'),
     itemsShowLimit: 3,
     allowSearchFilter: true
   };
-
-  goToPage(page: number) {
-    if (page !== this.filters.page) {
-      this.filters.page = page;
-      this.fetchStock();
-    }
-  }
 
   ngOnInit(): void {
     const nameFromRoute = this.route.snapshot.paramMap.get('storeName') || '';
@@ -75,20 +55,15 @@ export class StockListComponent implements OnInit {
   }
 
   fetchStock() {
-    this.spinner.show(undefined, {
-      type: 'ball-spin-clockwise'
-    });
+    this.spinner.show(undefined, { type: 'ball-spin-clockwise' });
 
     this.stockService.getStockWithParams(this.filters)
       .subscribe({
         next: (data) => {
-          debugger;
           this.stockData = data;
           this.categoryDropdownList = data.Categories.map(c => ({ value: c }));
-          //console.log("📦 Products Received:", this.stockData.Products);
           this.spinner.hide();
         },
-
         error: (err) => {
           console.error('Error fetching stock', err);
           this.spinner.hide();
@@ -111,24 +86,6 @@ export class StockListComponent implements OnInit {
     this.fetchStock();
   }
 
-  nextPage() {
-    this.filters.page++;
-    this.fetchStock();
-  }
-
-  prevPage() {
-    if (this.filters.page > 1) {
-      this.filters.page--;
-      this.fetchStock();
-    }
-  }
-
-  showAddModal = false;
-
-  openAddModal() {
-    this.showAddModal = true;
-  }
-
   getSortArrow(column: string): string {
     if (this.filters.sortColumn === column) {
       return this.filters.sortOrder === 'ASC' ? '▲' : '▼';
@@ -137,16 +94,17 @@ export class StockListComponent implements OnInit {
     }
   }
 
+  showAddModal = false;
+  openAddModal() {
+    this.showAddModal = true;
+  }
+
   onAddModalClosed(refresh: boolean) {
     this.showAddModal = false;
-
     if (refresh) {
-      this.successMessage = '✅ Stock added successfully!';
+      this.successMessage = this.transloco.translate('stock.messages.added');
       this.applyFilters();
-
-      setTimeout(() => {
-        this.successMessage = '';
-      }, 3000);
+      setTimeout(() => this.successMessage = '', 3000);
     }
   }
 
@@ -165,38 +123,33 @@ export class StockListComponent implements OnInit {
   onEditModalClosed(refresh: boolean) {
     this.showEditModal = false;
     if (refresh) {
-      this.successMessage = "✅ Stock updated successfully!";
+      this.successMessage = this.transloco.translate('stock.messages.updated');
       this.applyFilters();
-
       setTimeout(() => this.successMessage = '', 3000);
     }
   }
 
   deleteStock(id: number) {
-    if (confirm('❗ Are you sure you want to delete this stock item?')) {
+    if (confirm(this.transloco.translate('stock.messages.deleteConfirm'))) {
       this.spinner.show();
 
       this.stockService.deleteStock(id).subscribe({
-
         next: (res) => {
-
           if (res.success) {
-            this.successMessage = "🗑️ Stock deleted successfully!";
+            this.successMessage = this.transloco.translate('stock.messages.deleted');
             this.applyFilters();
           } else {
-            alert("❌ Failed to delete: " + res.message);
+            alert(this.transloco.translate('stock.messages.deleteFailed') + res.message);
           }
           this.spinner.hide();
           setTimeout(() => this.successMessage = '', 3000);
         },
         error: (err) => {
           console.error('Delete error', err);
-          alert("❌ Unexpected error during deletion.");
+          alert(this.transloco.translate('stock.messages.deleteError'));
           this.spinner.hide();
         }
       });
     }
   }
-
-
 }

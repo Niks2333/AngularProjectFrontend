@@ -18,6 +18,7 @@ import { EditStockModalComponent } from './components/edit-stock-modal/edit-stoc
 import { StoreAddComponent } from './store-add/store-add.component';
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from './auth.interceptor';
+import { TranslocoRootModule } from './transloco-root.module';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { AuthInterceptor } from './auth.interceptor';
     NgbModule,
     NgbPaginationModule,
     BrowserAnimationsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    TranslocoRootModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

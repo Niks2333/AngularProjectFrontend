@@ -65,7 +65,7 @@ export class AddStockModalComponent implements OnInit {
       }
     });
   }
-
+  
   close(refresh: boolean = false) {
     this.closed.emit(refresh);
   }

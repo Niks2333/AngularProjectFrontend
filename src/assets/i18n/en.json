@@ -1,0 +1,38 @@
+{
+  "stock": {
+    "storeTitle": "Showing Stock for",
+    "filters": {
+      "title": "Filters",
+      "search": "Search Product",
+      "searchPlaceholder": "🔍 Search Product",
+      "category": "Category",
+      "categoryPlaceholder": "📂 Select Categories",
+      "pageSize": "Items per page",
+      "show": "Show",
+      "selectAll": "Select All",
+      "unselectAll": "Unselect All"
+    },
+    "table": {
+      "product": "Product",
+      "category": "Category",
+      "price": "Price",
+      "stock": "Stock",
+      "image": "Image",
+      "actions": "Actions"
+    },
+    "actions": {
+      "back": "Back to Stores",
+      "add": "Add Stock",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "messages": {
+      "added": "✅ Stock added successfully!",
+      "updated": "✅ Stock updated successfully!",
+      "deleted": "🗑️ Stock deleted successfully!",
+      "deleteConfirm": "❗ Are you sure you want to delete this stock item?",
+      "deleteFailed": "❌ Failed to delete: ",
+      "deleteError": "❌ Unexpected error during deletion."
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "stock": {
+    "storeTitle": "Affichage du stock pour",
+    "filters": {
+      "title": "Filtres",
+      "search": "Rechercher un produit",
+      "searchPlaceholder": "🔍 Rechercher un produit",
+      "category": "Catégorie",
+      "categoryPlaceholder": "📂 Sélectionner des catégories",
+      "pageSize": "Articles par page",
+      "show": "Afficher",
+      "selectAll": "Tout sélectionner",
+      "unselectAll": "Tout désélectionner"
+    },
+    "table": {
+      "product": "Produit",
+      "category": "Catégorie",
+      "price": "Prix",
+      "stock": "Stock",
+      "image": "Image",
+      "actions": "Actions"
+    },
+    "actions": {
+      "back": "Retour aux magasins",
+      "add": "Ajouter du stock",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "messages": {
+      "added": "✅ Stock ajouté avec succès !",
+      "updated": "✅ Stock mis à jour avec succès !",
+      "deleted": "🗑️ Stock supprimé avec succès !",
+      "deleteConfirm": "❗ Êtes-vous sûr de vouloir supprimer cet article du stock ?",
+      "deleteFailed": "❌ Échec de la suppression : ",
+      "deleteError": "❌ Erreur inattendue lors de la suppression."
+    }
+  }
+}
