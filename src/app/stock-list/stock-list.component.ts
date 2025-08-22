@@ -4,6 +4,7 @@ import { StoreProductViewModel } from '../models/store-product-view.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { TranslocoService } from '@ngneat/transloco';
+import { ExcelExportService } from '../services/export-excel.service';
 
 @Component({
   selector: 'app-stock-list',
@@ -34,7 +35,8 @@ export class StockListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private spinner: NgxSpinnerService,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private excelService: ExcelExportService
   ) { }
 
   dropdownSettings = {
@@ -152,4 +154,12 @@ export class StockListComponent implements OnInit {
       });
     }
   }
+  downloadExcel() {
+    if (this.stockData && this.stockData.Products) {
+      this.excelService.exportToExcel(this.stockData.Products, 'Productslist');
+    } else {
+      console.warn('No product data available for export');
+    }
+  }
+
 }
